@@ -1,22 +1,25 @@
 #[macro_use]
 extern crate algorithmia;
+#[macro_use]
+extern crate serde_derive;
 
 use algorithmia::prelude::*;
+use std::error::Error;
+mod day0;
 
-// API calls will begin at the apply() method, with the request body passed as 'input'
-// For more details, see algorithmia.com/developers/algorithm-development/languages
-algo_entrypoint!(&str);
-fn apply(input: &str) -> Result<String, String> {
-    Ok(format!("Hello {}", input))
+#[derive(Deserialize)]
+pub struct Input {
+    day: u32,
+    part: u32,
+    input: String,
 }
 
-
-#[cfg(test)]
-mod test {
-    use super::apply;
-
-    #[test]
-    fn test_apply() {
-        assert_eq!(&apply("Jane").unwrap(), "Hello Jane");
+algo_entrypoint!(Input);
+fn apply(input: Input) -> Result<String, Box<Error>> {
+    match (input.day, input.part) {
+        (0, 1) => day0::part1(&input.input),
+        (0, 2) => day0::part2(&input.input),
+        _ => Err(format!("Puzzle '{}-{}' not supported", input.day, input.part).into()),
     }
 }
+
