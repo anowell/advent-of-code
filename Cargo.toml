@@ -7,8 +7,8 @@ version = "0.1.0"
 name = "algorithm"
 
 [dependencies]
-algorithmia = "2.0.0"
-base64 = "0.3.0"
-serde = "0.9.0"
-serde_derive = "0.9.0"
-serde_json = "0.9.0"
+algorithmia = { git = "https://github.com/anowell/algorithmia-rust.git", rev = "84dc1f37c3054f9723648c24bfa289069bfd4791" }
+base64 = "0.5.2"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
