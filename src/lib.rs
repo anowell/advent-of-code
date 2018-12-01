@@ -2,10 +2,15 @@
 extern crate algorithmia;
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate serde_json;
 
 use algorithmia::prelude::*;
-use std::error::Error;
+
+type Error = Box<std::error::Error>;
+
 mod day0;
+mod day1;
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -15,11 +20,16 @@ pub struct Input {
 }
 
 algo_entrypoint!(Input);
-fn apply(input: Input) -> Result<String, Box<Error>> {
-    match (input.day, input.part) {
-        (0, 1) => day0::part1(&input.input),
-        (0, 2) => day0::part2(&input.input),
-        _ => Err(format!("Puzzle '{}-{}' not supported", input.day, input.part).into()),
+fn apply(input: Input) -> Result<Value, Error> {
+    let Input{ day, part, input } = input;
+    match (day, part) {
+        (0, 1) => Ok(json!(day0::part1(&input)?)),
+        (0, 2) => Ok(json!(day0::part2(&input)?)),
+        (1, 1) => Ok(json!(day1::part1(&input)?)),
+        (1, 2) => Ok(json!(day1::part2(&input)?)),
+        _ => {
+            return Err(format!("Puzzle '{}-{}' not supported", day, part).into());
+        }
     }
 }
 

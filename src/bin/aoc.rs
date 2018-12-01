@@ -27,7 +27,7 @@ fn main() {
         "input": input.trim(),
     }))));
     match output {
-        Ok(AlgoOutput::Text(res)) => println!("{}", res),
+        Ok(AlgoOutput::Json(res)) => println!("{}", res),
         Ok(_) => unimplemented!(),
         Err(err) => print_cause_chain(&*err),
     }
