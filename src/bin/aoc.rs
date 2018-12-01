@@ -5,9 +5,9 @@ extern crate serde_json;
 
 use algorithmia::algo::{AlgoInput, AlgoOutput, EntryPoint};
 use std::borrow::Cow;
+use std::error::Error;
 use std::fs::File;
 use std::io::Read;
-use std::error::Error;
 
 fn main() {
     let algo = algorithm::Algo::default();
@@ -17,9 +17,10 @@ fn main() {
     let part = args.next().expect("Must specify a part number");
 
     let mut input = String::new();
-    let mut file = File::open(&format!("inputs/day-{}.txt", day))
-        .expect("Failed to open puzzle input");
-    file.read_to_string(&mut input).expect("Failed reading file");
+    let mut file =
+        File::open(&format!("inputs/day-{}.txt", day)).expect("Failed to open puzzle input");
+    file.read_to_string(&mut input)
+        .expect("Failed reading file");
 
     let output = algo.apply(AlgoInput::Json(Cow::Owned(json!({
         "day": str::parse::<u32>(&day).unwrap(),

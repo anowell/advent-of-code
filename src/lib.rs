@@ -21,7 +21,7 @@ pub struct Input {
 
 algo_entrypoint!(Input);
 fn apply(input: Input) -> Result<Value, Error> {
-    let Input{ day, part, input } = input;
+    let Input { day, part, input } = input;
     match (day, part) {
         (0, 1) => Ok(json!(day0::part1(&input)?)),
         (0, 2) => Ok(json!(day0::part2(&input)?)),
@@ -32,4 +32,3 @@ fn apply(input: Input) -> Result<Value, Error> {
         }
     }
 }
-

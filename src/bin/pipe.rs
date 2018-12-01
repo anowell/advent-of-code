@@ -10,10 +10,10 @@ extern crate serde_derive;
 use algorithmia::algo::{AlgoInput, AlgoOutput, EntryPoint};
 use algorithmia::error::{Error, ErrorKind, ResultExt};
 use serde_json::Value;
-use std::error::Error as StdError;
 use std::borrow::Cow;
-use std::io::{self, BufRead, Write};
+use std::error::Error as StdError;
 use std::fs::OpenOptions;
+use std::io::{self, BufRead, Write};
 use std::process;
 
 const ALGOOUT: &'static str = "/tmp/algoout";
@@ -50,7 +50,9 @@ impl AlgoSuccess {
     fn new<S: Into<String>>(result: Value, content_type: S) -> AlgoSuccess {
         AlgoSuccess {
             result: result,
-            metadata: RunnerMetadata { content_type: content_type.into() },
+            metadata: RunnerMetadata {
+                content_type: content_type.into(),
+            },
         }
     }
 }
@@ -149,20 +151,17 @@ fn algoout(output_json: &str) {
 }
 
 fn call_algorithm<E: EntryPoint>(algo: &E, stdin: String) -> Result<AlgoOutput, Box<StdError>> {
-    let req = serde_json::from_str(&stdin)
-        .chain_err(|| ErrorKind::DecodeJson("request"))?;
+    let req = serde_json::from_str(&stdin).chain_err(|| ErrorKind::DecodeJson("request"))?;
     let Request { data, content_type } = req;
     let input = match (&*content_type, data) {
         ("text", Value::String(text)) => AlgoInput::Text(Cow::Owned(text)),
         ("binary", Value::String(ref encoded)) => {
-            let bytes = base64::decode(encoded)
-                .chain_err(|| ErrorKind::DecodeBase64("request input"))?;
+            let bytes =
+                base64::decode(encoded).chain_err(|| ErrorKind::DecodeBase64("request input"))?;
             AlgoInput::Binary(Cow::Owned(bytes))
         }
         ("json", json_obj) => AlgoInput::Json(Cow::Owned(json_obj)),
-        (_, _) => return Err(
-            Error::from(ErrorKind::InvalidContentType(content_type)).into(),
-        ),
+        (_, _) => return Err(Error::from(ErrorKind::InvalidContentType(content_type)).into()),
     };
     algo.apply(input)
 }

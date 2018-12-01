@@ -1,6 +1,6 @@
-use Error;
 use std::collections::HashSet;
 use std::num::ParseIntError;
+use Error;
 
 // 2018 AoC Day 1 puzzle
 
@@ -11,13 +11,13 @@ pub fn part1(input: &str) -> Result<i32, Error> {
 
 pub fn part2(input: &str) -> Result<i32, Error> {
     let mut found = HashSet::new();
-    let mut total: i32 = 0;
+    let mut total = 0;
     found.insert(total);
 
     // The problem description allows for infinite loops. We're capping it at 1M iterations
-    for num in parse_nums(input)?.iter().cycle().take(1_000_000) {;
+    for num in parse_nums(input)?.iter().cycle().take(1_000_000) {
         total += num;
-        if ! found.insert(total) {
+        if !found.insert(total) {
             return Ok(total);
         }
     }
@@ -25,10 +25,10 @@ pub fn part2(input: &str) -> Result<i32, Error> {
 }
 
 fn parse_nums(input: &str) -> Result<Vec<i32>, ParseIntError> {
-     input
+    input
         .split(|c| c == ',' || c == '\n')
         .map(str::trim)
-        .map(str::parse::<i32>)
+        .map(str::parse)
         .collect()
 }
 
