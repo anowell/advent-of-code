@@ -3,6 +3,7 @@ use std::num::ParseIntError;
 use Error;
 
 // 2018 AoC Day 1 puzzle
+// https://adventofcode.com/2018/day/1
 
 pub fn part1(input: &str) -> Result<i32, Error> {
     let sum = parse_nums(input)?.iter().sum();
@@ -26,6 +27,7 @@ pub fn part2(input: &str) -> Result<i32, Error> {
 
 fn parse_nums(input: &str) -> Result<Vec<i32>, ParseIntError> {
     input
+        .trim()
         .split(|c| c == ',' || c == '\n')
         .map(str::trim)
         .map(str::parse)
@@ -35,6 +37,9 @@ fn parse_nums(input: &str) -> Result<Vec<i32>, ParseIntError> {
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[cfg(feature = "bench")]
+    use test::Bencher;
 
     #[test]
     fn test_part1() {
@@ -51,5 +56,12 @@ mod test {
         assert_eq!(part2("+3, +3, +4, -2, -4").unwrap(), 10);
         assert_eq!(part2("-6, +3, +8, +5, -6").unwrap(), 5);
         assert_eq!(part2("+7, +7, -2, -7, -4").unwrap(), 14);
+    }
+
+    #[cfg_attr(feature = "bench", bench)]
+    #[cfg(feature = "bench")]
+    fn bench_part1(b: &mut Bencher) {
+        let input = ::std::fs::read_to_string("inputs/day-1.txt").expect("Unable to open file");
+        b.iter(|| part1(&input).unwrap());
     }
 }
