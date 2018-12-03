@@ -87,23 +87,22 @@ pub fn part2(input: &str) -> Result<u32, Error> {
     }
 }
 
-fn parse_claim(input: &str) -> Result<Claim, Error> {
-    lazy_static! {
-        static ref RE: Regex = Regex::new(r"[^\d]").unwrap();
-    }
-    let replaced = RE.replace_all(input, " ");
-    let mut cleaned = replaced.split(" ").filter(|s| !s.is_empty());
-    Ok(Claim {
-        id: cleaned.next().ok_or_else(claim_parse_error)?.parse()?,
-        x: cleaned.next().ok_or_else(claim_parse_error)?.parse()?,
-        y: cleaned.next().ok_or_else(claim_parse_error)?.parse()?,
-        w: cleaned.next().ok_or_else(claim_parse_error)?.parse()?,
-        h: cleaned.next().ok_or_else(claim_parse_error)?.parse()?,
-    })
+lazy_static! {
+    static ref CLAIM_RE: Regex = Regex::new(r"^#(\d+) @ (\d+),(\d+): (\d+)x(\d+)$").unwrap();
 }
 
-fn claim_parse_error() -> Error {
-    "Claim does not appear to be valid".into()
+fn parse_claim(input: &str) -> Result<Claim, Error> {
+    let caps = CLAIM_RE
+        .captures(input)
+        .ok_or_else(|| format!("Claim could not be parsed: {}", input))?;
+
+    Ok(Claim {
+        id: caps[1].parse()?,
+        x: caps[2].parse()?,
+        y: caps[3].parse()?,
+        w: caps[4].parse()?,
+        h: caps[5].parse()?,
+    })
 }
 
 #[cfg(test)]
