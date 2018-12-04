@@ -23,6 +23,7 @@ mod day0;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -43,6 +44,8 @@ fn apply(input: Input) -> Result<Value, Error> {
         (2, 2) => Ok(json!(day2::part2(&input)?)),
         (3, 1) => Ok(json!(day3::part1(&input)?)),
         (3, 2) => Ok(json!(day3::part2(&input)?)),
+        (4, 1) => Ok(json!(day4::part1(&input)?)),
+        (4, 2) => Ok(json!(day4::part2(&input)?)),
         _ => {
             return Err(format!("Puzzle '{}-{}' not supported", day, part).into());
         }
