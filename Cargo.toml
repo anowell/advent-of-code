@@ -16,6 +16,8 @@ fxhash = "0.2.1"
 regex = "1.0.0"
 matrix = "0.21.12"
 lazy_static = "=1.0.0"
+linked-list = "0.0.3"
+rayon = "1.0.3"
 
 # Held back to suppor rust 1.22
 thread_local = "=0.3.2"
