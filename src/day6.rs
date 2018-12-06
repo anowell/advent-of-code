@@ -31,8 +31,8 @@ pub fn part1(input: &str) -> Result<u32, Error> {
 
     let mut regions = vec![0; points.len()];
 
-    for y in (pmin.y)..=(pmax.y) {
-        for x in (pmin.x)..=(pmax.x) {
+    for y in (pmin.y)..(pmax.y + 1) {
+        for x in (pmin.x)..(pmax.x + 1) {
             let mut min_index = None;
             let mut min_distance = 0;
             let grid_point = Point { x, y };
@@ -72,8 +72,8 @@ pub fn part2(input: &str, total_distance_bound: u32) -> Result<u32, Error> {
     let (pmin, pmax) = bounding_box(&points);
 
     let mut region_size = 0;
-    for y in (pmin.y)..=(pmax.y) {
-        for x in (pmin.x)..=(pmax.x) {
+    for y in (pmin.y)..(pmax.y + 1) {
+        for x in (pmin.x)..(pmax.x + 1) {
             // Add up all the distances
             let grid_point = Point { x, y };
             let total_distance: u32 = points
