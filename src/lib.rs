@@ -12,10 +12,10 @@ extern crate serde_json;
 #[macro_use]
 extern crate lazy_static;
 extern crate fxhash;
-extern crate matrix;
-extern crate regex;
 extern crate linked_list;
+extern crate matrix;
 extern crate rayon;
+extern crate regex;
 
 use algorithmia::prelude::*;
 
@@ -27,6 +27,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -51,6 +52,8 @@ fn apply(input: Input) -> Result<Value, Error> {
         (4, 2) => Ok(json!(day4::part2(&input)?)),
         (5, 1) => Ok(json!(day5::part1(&input)?)),
         (5, 2) => Ok(json!(day5::part2(&input)?)),
+        (6, 1) => Ok(json!(day6::part1(&input)?)),
+        (6, 2) => Ok(json!(day6::part2(&input, 10_000)?)),
         _ => {
             return Err(format!("Puzzle '{}-{}' not supported", day, part).into());
         }
