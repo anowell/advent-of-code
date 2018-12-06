@@ -1,10 +1,9 @@
-use fxhash::{FxHashMap};
+use fxhash::FxHashMap;
 use regex::Regex;
 use Error;
 
 // 2018 AoC Day 4 puzzle
 // https://adventofcode.com/2018/day/4
-
 
 // Builds a Map
 fn guard_map(input: &str) -> Result<FxHashMap<u32, Vec<u64>>, Error> {
@@ -22,7 +21,7 @@ fn guard_map(input: &str) -> Result<FxHashMap<u32, Vec<u64>>, Error> {
     // Find each Sleep->Wake cycle and turn it into a bitmap of the minutes asleep
     // 60 minutes worth of bits fits nicely into a u64
     let mut guard_map = FxHashMap::default();
-    let mut current_guard = 0_u32;  // Guard 0 isn't really a valid starting point, but works as long as first record is Event::Wake
+    let mut current_guard = 0_u32; // Guard 0 isn't really a valid starting point, but works as long as first record is Event::Wake
     let mut sleep_min = 0;
     for entry in entries {
         match entry.evt {
@@ -52,14 +51,15 @@ pub fn part1(input: &str) -> Result<u32, Error> {
     let guard_map = guard_map(input)?;
 
     // Find the guard that sleeps the most
-    let sleepy_guard = guard_map.iter()
-        .max_by_key(|&(_k,v)| v.iter().map(|n| n.count_ones()).sum::<u32>() )
+    let sleepy_guard = guard_map
+        .iter()
+        .max_by_key(|&(_k, v)| v.iter().map(|n| n.count_ones()).sum::<u32>())
         .unwrap();
 
     // Find the sleepiest minute for the sleepy guard
     let mut sleepiest_minute = 0;
     let mut sleepiest_count = 0;
-    for i in  0..60 {
+    for i in 0..60 {
         let mut sum = 0;
         for schedule in sleepy_guard.1 {
             if schedule & (1_u64 << i) != 0 {
@@ -83,7 +83,7 @@ pub fn part2(input: &str) -> Result<u32, Error> {
     let mut sleepiest_count = 0;
     let mut sleepiest_guard = 0;
     for (guard, schedules) in guard_map {
-        for i in  0..60 {
+        for i in 0..60 {
             let mut sum = 0;
             for schedule in &schedules {
                 if schedule & (1_u64 << i) != 0 {
@@ -100,7 +100,6 @@ pub fn part2(input: &str) -> Result<u32, Error> {
 
     Ok(sleepiest_guard * sleepiest_minute)
 }
-
 
 lazy_static! {
     static ref RE: Regex = Regex::new(r"^\[\d+-(\d+)-(\d+) (\d+):(\d+)\] (.+)$").unwrap();

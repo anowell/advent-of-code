@@ -16,9 +16,9 @@ test22:
 fetch day:
   @target/fetchdata {{day}}
 
-run day part:
+run puzzle file='':
   @just build
-  @target/debug/aoc {{day}} {{part}}
+  @target/debug/aoc {{puzzle}} {{file}}
 
 version:
   cargo version

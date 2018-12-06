@@ -9,22 +9,49 @@ use std::error::Error;
 use std::fs::File;
 use std::io::Read;
 
+macro_rules! bail {
+    ($e:expr) => {{
+        eprintln!($e);
+        ::std::process::exit(1)
+    }};
+    ($fmt:expr, $($arg:tt)+) => {{
+        eprintln!($fmt, $($arg)+);
+        ::std::process::exit(1)
+    }};
+}
+
 fn main() {
     let algo = algorithm::Algo::default();
     let mut args = ::std::env::args();
     let _ = args.next();
-    let day = args.next().expect("Must specify a day number");
-    let part = args.next().expect("Must specify a part number");
 
+    let puzzle = args
+        .next()
+        .expect("Must specifiy a puzzle (e.g. 2-1 for day 2 part 1)");
+    let mut split = puzzle.split('-');
+    let day: u32 = split
+        .next()
+        .unwrap()
+        .parse()
+        .expect("Failed to parse a day number from the puzzle");
+    let part: u32 = split
+        .next()
+        .unwrap_or("1")
+        .parse()
+        .expect("Failed to parse a part number from the puzzle");;
+
+    let file_path = args
+        .next()
+        .unwrap_or_else(|| format!("inputs/day-{}.txt", day));
     let mut input = String::new();
     let mut file =
-        File::open(&format!("inputs/day-{}.txt", day)).expect("Failed to open puzzle input");
+        File::open(&file_path).unwrap_or_else(|e| bail!("Failed to open puzzle input: {}", e));
     file.read_to_string(&mut input)
         .expect("Failed reading file");
 
     let output = algo.apply(AlgoInput::Json(Cow::Owned(json!({
-        "day": str::parse::<u32>(&day).unwrap(),
-        "part": str::parse::<u32>(&part).unwrap(),
+        "day": day,
+        "part": part,
         "input": input.trim(),
     }))));
     match output {

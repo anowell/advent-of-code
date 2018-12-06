@@ -1,6 +1,6 @@
-use Error;
 use linked_list::LinkedList;
 use rayon::prelude::*;
+use Error;
 
 // 2018 AoC Day 5 puzzle
 // https://adventofcode.com/2018/day/5
@@ -33,8 +33,8 @@ fn chain_react_counter(list: &mut LinkedList<u8>) -> usize {
 
                 // Hacking around the borrow_checker. Eventually we should be able to write:
                 //   `prev = match cursor.peek_prev().or_else(Cursor::next)`
-                let tmp = cursor.peek_prev().map(|n|*n);
-                prev = match tmp.or_else(|| cursor.next().map(|n|*n)) {
+                let tmp = cursor.peek_prev().map(|n| *n);
+                prev = match tmp.or_else(|| cursor.next().map(|n| *n)) {
                     Some(n) => n,
                     None => break,
                 };
@@ -87,12 +87,13 @@ pub fn part2(input: &str) -> Result<usize, Error> {
     let bytes = input.trim().as_bytes().to_owned();
 
     // Let rayon iterate over each character in parallel
-    let min = (b'A'..(b'Z'+1)).into_par_iter()
+    let min = (b'A'..(b'Z' + 1))
+        .into_par_iter()
         .map(|c| {
             let mut list: Vec<_> = bytes
                 .iter()
                 .map(|b| *b)
-                .filter(|b| c % CASE_DIFF != b % CASE_DIFF )
+                .filter(|b| c % CASE_DIFF != b % CASE_DIFF)
                 .collect();
             fast_chain_react_counter(&mut list)
         })
@@ -100,7 +101,6 @@ pub fn part2(input: &str) -> Result<usize, Error> {
         .unwrap();
     Ok(min)
 }
-
 
 #[cfg(test)]
 mod test {
