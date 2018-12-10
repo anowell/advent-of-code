@@ -24,6 +24,7 @@ type Error = Box<std::error::Error>;
 
 mod day0;
 mod day1;
+mod day10;
 mod day2;
 mod day3;
 mod day4;
@@ -64,6 +65,8 @@ fn apply(input: Input) -> Result<Value, Error> {
         (8, 2) => Ok(json!(day8::part2(&input)?)),
         (9, 1) => Ok(json!(day9::part1(&input)?)),
         (9, 2) => Ok(json!(day9::part2(&input)?)),
+        (10, 1) => Ok(json!(day10::part1(&input)?)),
+        (10, 2) => Ok(json!(day10::part2(&input)?)),
         _ => {
             return Err(format!("Puzzle '{}-{}' not supported", day, part).into());
         }

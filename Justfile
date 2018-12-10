@@ -18,7 +18,7 @@ fetch day:
 
 run puzzle file='':
   @just build
-  @target/debug/aoc {{puzzle}} {{file}}
+  @target/debug/aoc {{puzzle}} {{file}} | jq -r '.'
 
 version:
   cargo version
