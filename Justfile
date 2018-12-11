@@ -20,5 +20,9 @@ run puzzle file='':
   @just build
   @target/debug/aoc {{puzzle}} {{file}} | jq -r '.'
 
+relrun puzzle file='':
+  @just build --release
+  @target/release/aoc {{puzzle}} {{file}} | jq -r '.'
+
 version:
   cargo version
