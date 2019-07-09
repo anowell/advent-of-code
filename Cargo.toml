@@ -20,6 +20,7 @@ linked-list = "0.0.3"
 rayon = "1.0.3"
 # petgraph = "0.4.13"
 daggy = "0.6.0"
+bitvec = "0.9.0"
 
 # Held back to suppor rust 1.22
 thread_local = "=0.3.2"

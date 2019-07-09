@@ -11,6 +11,7 @@ extern crate serde_derive;
 extern crate serde_json;
 #[macro_use]
 extern crate lazy_static;
+extern crate bitvec;
 extern crate daggy;
 extern crate fxhash;
 extern crate linked_list;
@@ -26,6 +27,8 @@ mod day0;
 mod day1;
 mod day10;
 mod day11;
+mod day12;
+mod day13;
 mod day2;
 mod day3;
 mod day4;
@@ -70,6 +73,10 @@ fn apply(input: Input) -> Result<Value, Error> {
         (10, 2) => Ok(json!(day10::part2(&input)?)),
         (11, 1) => Ok(json!(day11::part1(&input)?)),
         (11, 2) => Ok(json!(day11::part2(&input)?)),
+        (12, 1) => Ok(json!(day12::part1(&input)?)),
+        (12, 2) => Ok(json!(day12::part2(&input)?)),
+        (13, 1) => Ok(json!(day13::part1(&input)?)),
+        (13, 2) => Ok(json!(day13::part2(&input)?)),
         _ => {
             return Err(format!("Puzzle '{}-{}' not supported", day, part).into());
         }

@@ -18,11 +18,11 @@ fetch day:
 
 run puzzle file='':
   @just build
-  @target/debug/aoc {{puzzle}} {{file}} | jq -r '.'
+  @target/debug/aoc {{puzzle}} {{file}}
 
 relrun puzzle file='':
   @just build --release
-  @target/release/aoc {{puzzle}} {{file}} | jq -r '.'
+  @target/release/aoc {{puzzle}} {{file}}
 
 version:
   cargo version

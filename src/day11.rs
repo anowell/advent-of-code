@@ -9,38 +9,38 @@ const HEIGHT: usize = 300;
 
 #[derive(Debug)]
 struct SubGridPower {
-    x: usize,
-    y: usize,
-    power: isize,
+    x: u32,
+    y: u32,
+    power: i32,
 }
 
-fn power_level(x: isize, y: isize, sn: isize) -> isize {
-    let rack_id = x + 10;
-    ((y * rack_id + sn) * rack_id) / 100 % 10 - 5
+fn power_level(x: u32, y: u32, sn: i32) -> i8 {
+    let rack_id = x as i32 + 10;
+    (((y as i32 * rack_id + sn) * rack_id) / 100 % 10 - 5) as i8
 }
 
-fn build_grid(sn: isize) -> Conventional<isize> {
+fn build_grid(sn: i32) -> Conventional<i8> {
     let mut grid = Conventional::new((WIDTH, HEIGHT));
     for i in 0..HEIGHT {
         for j in 0..WIDTH {
-            let level = power_level(1 + j as isize, 1 + i as isize, sn);
+            let level = power_level(1 + j as u32, 1 + i as u32, sn);
             grid[(j, i)] = level;
         }
     }
     grid
 }
 
-fn find_subgrid_power(grid: &Conventional<isize>, square_size: usize) -> SubGridPower {
+fn find_subgrid_power(grid: &Conventional<i8>, square_size: usize) -> SubGridPower {
     let mut i_max = 0;
     let mut j_max = 0;
-    let mut val_max = 0;
+    let mut val_max: i32 = 0;
 
     for i in 0..(HEIGHT - square_size + 1) {
         for j in 0..(WIDTH - square_size + 1) {
-            let mut sum = 0;
+            let mut sum: i32 = 0;
             for a in 0..square_size {
                 for b in 0..square_size {
-                    sum += grid[(j + b, i + a)]
+                    sum += grid[(j + b, i + a)] as i32;
                 }
             }
             if sum > val_max {
@@ -52,21 +52,21 @@ fn find_subgrid_power(grid: &Conventional<isize>, square_size: usize) -> SubGrid
     }
 
     SubGridPower {
-        x: j_max + 1,
-        y: i_max + 1,
+        x: j_max as u32 + 1,
+        y: i_max as u32 + 1,
         power: val_max,
     }
 }
 
 pub fn part1(input: &str) -> Result<String, Error> {
-    let sn: isize = input.trim().parse()?;
+    let sn = input.trim().parse()?;
     let grid = build_grid(sn);
     let SubGridPower { x, y, .. } = find_subgrid_power(&grid, 3);
     Ok(format!("{},{}", x, y))
 }
 
 pub fn part2(input: &str) -> Result<String, Error> {
-    let sn: isize = input.trim().parse()?;
+    let sn = input.trim().parse()?;
     let grid = build_grid(sn);
     let (max_subgrid, idx) = (1..(WIDTH + 1))
         .into_par_iter()
@@ -112,13 +112,6 @@ mod test {
     fn bench_part1(b: &mut Bencher) {
         let input = ::std::fs::read_to_string("inputs/day-11.txt").expect("Unable to open file");
         b.iter(|| part1(&input).unwrap());
-    }
-
-    #[cfg_attr(feature = "bench", bench)]
-    #[cfg(feature = "bench")]
-    fn bench_part2(b: &mut Bencher) {
-        let input = ::std::fs::read_to_string("inputs/day-11.txt").expect("Unable to open file");
-        b.iter(|| part2(&input).unwrap());
     }
 
 }

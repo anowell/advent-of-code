@@ -51,7 +51,6 @@ cargo bench
 # Run benchmarks for a specific day
 cargo bench day4
 
-# TODO
 cargo build --release
 target/release/aoc 4-1
 target/release/aoc 4-1 inputs/day-4.txt
