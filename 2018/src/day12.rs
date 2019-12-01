@@ -1,9 +1,8 @@
 use regex::Regex;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 12 puzzle
 // https://adventofcode.com/2018/day/12
-
 
 fn print(slice: &[bool], offset: i64) {
     for _ in -30..=offset {
@@ -28,7 +27,7 @@ pub fn part1(input: &str) -> Result<i64, Error> {
     let config = parse_input(input)?;
 
     let mut pots = config.initial;
-    let zero_point: usize = 0;
+    let _zero_point: usize = 0;
     let map = config.map;
 
     let mut offset: i64 = 0;
@@ -77,8 +76,7 @@ pub fn part1(input: &str) -> Result<i64, Error> {
         .sum::<i64>())
 }
 
-pub fn part2(input: &str) -> Result<i32, Error> {
-
+pub fn part2(_input: &str) -> Result<i32, Error> {
     // let idx = 120
     // let prev = val[idx];
     // let next = val[idx+1];

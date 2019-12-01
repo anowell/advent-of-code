@@ -1,7 +1,7 @@
 use regex::Regex;
 use std::cmp::{max, min};
 use std::u32::MAX as MAX_U32;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 6 puzzle
 // https://adventofcode.com/2018/day/6
@@ -154,5 +154,4 @@ mod test {
         let input = ::std::fs::read_to_string("inputs/day-6.txt").expect("Unable to open file");
         b.iter(|| part2(&input, 10000).unwrap());
     }
-
 }

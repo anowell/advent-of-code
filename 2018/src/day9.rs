@@ -1,6 +1,6 @@
 use linked_list::{Cursor, LinkedList};
 use regex::Regex;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 9 puzzle
 // https://adventofcode.com/2018/day/9

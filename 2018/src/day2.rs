@@ -1,5 +1,5 @@
 use fxhash::FxHashMap;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 2 puzzle
 // https://adventofcode.com/2018/day/2
@@ -120,5 +120,4 @@ wvxyz
         let input = ::std::fs::read_to_string("inputs/day-2.txt").expect("Unable to open file");
         b.iter(|| part2(&input).unwrap());
     }
-
 }

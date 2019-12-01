@@ -1,7 +1,7 @@
 use daggy::{Dag, NodeIndex, Walker};
 use fxhash::FxHashMap;
 use regex::Regex;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 7 puzzle
 // https://adventofcode.com/2018/day/7
@@ -238,5 +238,4 @@ Step F must be finished before step E can begin.
         let input = ::std::fs::read_to_string("inputs/day-7.txt").expect("Unable to open file");
         b.iter(|| part2(&input, 5, 60).unwrap());
     }
-
 }

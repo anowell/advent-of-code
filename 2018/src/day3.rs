@@ -1,7 +1,7 @@
 use fxhash::FxHashSet;
 use matrix::format::conventional::Conventional;
 use regex::Regex;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 3 puzzle
 // https://adventofcode.com/2018/day/3
@@ -145,5 +145,4 @@ mod test {
         let input = ::std::fs::read_to_string("inputs/day-3.txt").expect("Unable to open file");
         b.iter(|| part2(&input).unwrap());
     }
-
 }

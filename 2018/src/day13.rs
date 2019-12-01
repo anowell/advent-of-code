@@ -1,14 +1,12 @@
-use Error;
-use std::cmp::Ordering;
-use std::ops::Add;
 use matrix::format::conventional::Conventional;
-use std::collections::HashSet;
 use matrix::Element;
+use std::cmp::Ordering;
+use std::collections::HashSet;
+use std::ops::Add;
+use crate::Error;
 
 // 2018 AoC Day 13 puzzle
 // https://adventofcode.com/2018/day/13
-
-
 
 // turns out the pattern starts repeating just before the 100th generation
 pub fn part1(input: &str) -> Result<String, Error> {
@@ -22,10 +20,10 @@ pub fn part1(input: &str) -> Result<String, Error> {
 
 pub fn part2(input: &str) -> Result<String, Error> {
     let mut map = parse_input(input);
-        // print(&map);
+    // print(&map);
     println!("{} cars", map.carts.len());
     let mut prev;
-    for i in 0..1_000_000 {
+    for _i in 0..1_000_000 {
         prev = map.clone();
         let crashes = map.tick_remove_crashes();
         // print(&map);
@@ -97,7 +95,6 @@ pub enum Turn {
     Straight,
 }
 
-
 impl Add<Direction> for Coordinate {
     type Output = Coordinate;
 
@@ -160,10 +157,10 @@ impl Cart {
 
     fn update_heading(&mut self, cell_path: Cell) {
         match cell_path {
-            Cell::NorthSouth | Cell::EastWest => {},
+            Cell::NorthSouth | Cell::EastWest => {}
 
             // Path:  \
-            Cell::CurveNwSe  => {
+            Cell::CurveNwSe => {
                 self.direction = match self.direction {
                     Direction::North => Direction::West,
                     Direction::South => Direction::East,
@@ -221,7 +218,7 @@ impl Map {
     }
 
     fn add_cart(&mut self, x: usize, y: usize, direction: Direction) {
-        let cart = Cart::new(x as u32,y as u32, direction);
+        let cart = Cart::new(x as u32, y as u32, direction);
         self.cart_lookup.insert(cart.coord);
         self.carts.push(cart);
     }
@@ -236,7 +233,7 @@ impl Map {
 impl Map {
     fn tick(&mut self) -> Option<Coordinate> {
         // sort to make sure we move them in the right order
-        self.carts.sort_by(|a, b| a.coord.cmp(&b.coord) );
+        self.carts.sort_by(|a, b| a.coord.cmp(&b.coord));
         for cart in &mut self.carts {
             // vacate the current coord and move to the new coord
             self.cart_lookup.remove(&cart.coord);
@@ -260,8 +257,8 @@ impl Map {
         let mut crashes = HashSet::new();
 
         // sort to make sure we move them in the right order
-        self.carts.sort_by(|a, b| a.coord.cmp(&b.coord) );
-        for (i, cart) in self.carts.iter_mut().enumerate() {
+        self.carts.sort_by(|a, b| a.coord.cmp(&b.coord));
+        for (_i, cart) in self.carts.iter_mut().enumerate() {
             if crashes.contains(&cart.coord) {
                 continue;
             }
@@ -285,13 +282,24 @@ impl Map {
 
         if crashes.len() > 0 {
             println!("CRASHES: {:?}", crashes);
-            println!("Removing: cars {:?}", self.carts.iter().filter(|c| crashes.contains(&c.coord)).map(|c| *c).collect::<Vec<_>>());
+            println!(
+                "Removing: cars {:?}",
+                self.carts
+                    .iter()
+                    .filter(|c| crashes.contains(&c.coord))
+                    .map(|c| *c)
+                    .collect::<Vec<_>>()
+            );
         }
-        self.carts = self.carts.iter().filter(|c| !crashes.contains(&c.coord)).map(|c| *c).collect();
+        self.carts = self
+            .carts
+            .iter()
+            .filter(|c| !crashes.contains(&c.coord))
+            .map(|c| *c)
+            .collect();
 
         crashes.len() * 2
     }
-
 }
 
 fn parse_input(input: &str) -> Map {
@@ -312,10 +320,10 @@ fn parse_input(input: &str) -> Map {
             };
             map.set_cell(x, y, cell);
             match c {
-                b'<' => { map.add_cart(x, y, Direction::West) }
-                b'v' => { map.add_cart(x, y, Direction::South) }
-                b'>' => { map.add_cart(x, y, Direction::East) }
-                b'^' => { map.add_cart(x, y, Direction::North) }
+                b'<' => map.add_cart(x, y, Direction::West),
+                b'v' => map.add_cart(x, y, Direction::South),
+                b'>' => map.add_cart(x, y, Direction::East),
+                b'^' => map.add_cart(x, y, Direction::North),
                 _ => {}
             }
         }
@@ -324,33 +332,42 @@ fn parse_input(input: &str) -> Map {
     map
 }
 
-fn print(map: &Map) {
-    for y in 0..(map.grid.rows) {
-        for x in 0..(map.grid.columns) {
-            let coord = Coordinate { x: x as u32, y: y as u32 };
-            if map.cart_lookup.contains(&coord) {
-                let cart = map.carts.iter().find(|&&c| c.coord == coord).unwrap();
-                print!("{}", match cart.direction {
-                    Direction::East => '>',
-                    Direction::West => '<',
-                    Direction::North => '^',
-                    Direction::South => 'v',
-                })
-            } else {
-                print!("{}", match map.grid[coord.tuple()] {
-                    Cell::EastWest => '-',
-                    Cell::NorthSouth => '|',
-                    Cell::CurveNwSe => '\\',
-                    Cell::CurveSwNe => '/',
-                    Cell::Intersection => '+',
-                    Cell::None => ' ',
-                })
-            }
-        }
-        println!("");
-    }
-    println!("")
-}
+// fn print(map: &Map) {
+//     for y in 0..(map.grid.rows) {
+//         for x in 0..(map.grid.columns) {
+//             let coord = Coordinate {
+//                 x: x as u32,
+//                 y: y as u32,
+//             };
+//             if map.cart_lookup.contains(&coord) {
+//                 let cart = map.carts.iter().find(|&&c| c.coord == coord).unwrap();
+//                 print!(
+//                     "{}",
+//                     match cart.direction {
+//                         Direction::East => '>',
+//                         Direction::West => '<',
+//                         Direction::North => '^',
+//                         Direction::South => 'v',
+//                     }
+//                 )
+//             } else {
+//                 print!(
+//                     "{}",
+//                     match map.grid[coord.tuple()] {
+//                         Cell::EastWest => '-',
+//                         Cell::NorthSouth => '|',
+//                         Cell::CurveNwSe => '\\',
+//                         Cell::CurveSwNe => '/',
+//                         Cell::Intersection => '+',
+//                         Cell::None => ' ',
+//                     }
+//                 )
+//             }
+//         }
+//         println!("");
+//     }
+//     println!("")
+// }
 
 #[cfg(test)]
 mod test {

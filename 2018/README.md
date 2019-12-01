@@ -4,7 +4,6 @@ Advent of Code 2018 solutions in Rust that are [live](https://algorithmia.com/al
 
 [![](https://algorithmia.com/algorithms/anowell/RustyAoC2018/badge)](https://algorithmia.com/algorithms/anowell/RustyAoC2018)
 
-
 ## Usage
 
 ### Input

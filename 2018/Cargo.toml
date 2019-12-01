@@ -1,13 +1,13 @@
 [package]
 name = "RustyAoC2018"
 version = "0.1.0"
+edition = "2018"
 
 # The lib name is hard-coded into pipe.rs
 [lib]
-name = "algorithm"
+name = "aoc"
 
 [dependencies]
-algorithmia = { git = "https://github.com/anowell/algorithmia-rust.git", rev = "84dc1f37c3054f9723648c24bfa289069bfd4791" }
 base64 = "0.5.2"
 serde = "1.0"
 serde_derive = "1.0"

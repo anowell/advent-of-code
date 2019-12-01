@@ -1,6 +1,6 @@
 use linked_list::LinkedList;
 use rayon::prelude::*;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 5 puzzle
 // https://adventofcode.com/2018/day/5
@@ -137,5 +137,4 @@ mod test {
         let input = ::std::fs::read_to_string("inputs/day-5.txt").expect("Unable to open file");
         b.iter(|| part2(&input).unwrap());
     }
-
 }

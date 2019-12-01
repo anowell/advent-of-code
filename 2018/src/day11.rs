@@ -1,6 +1,6 @@
 use matrix::format::conventional::Conventional;
 use rayon::prelude::*;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 11 puzzle
 // https://adventofcode.com/2018/day/11
@@ -113,5 +113,4 @@ mod test {
         let input = ::std::fs::read_to_string("inputs/day-11.txt").expect("Unable to open file");
         b.iter(|| part1(&input).unwrap());
     }
-
 }

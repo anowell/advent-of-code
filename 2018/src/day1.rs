@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use std::num::ParseIntError;
-use Error;
+use crate::Error;
 
 // 2018 AoC Day 1 puzzle
 // https://adventofcode.com/2018/day/1

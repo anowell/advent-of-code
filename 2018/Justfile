@@ -14,7 +14,7 @@ test22:
   @OPENSSL_LIB_DIR=/usr/lib/openssl-1.0/ OPENSSL_INCLUDE_DIR=/usr/include/openssl-1.0/ rustup run 1.22.1 cargo test
 
 fetch day:
-  @target/fetchdata {{day}}
+  curl https://adventofcode.com/2019/day/{{day}}/input -o inputs/2019-{{day}}.txt
 
 run puzzle file='':
   @just build

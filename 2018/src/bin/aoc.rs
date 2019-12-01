@@ -1,10 +1,3 @@
-extern crate algorithm;
-extern crate algorithmia;
-#[macro_use]
-extern crate serde_json;
-
-use algorithmia::algo::{AlgoInput, AlgoOutput, EntryPoint};
-use std::borrow::Cow;
 use std::error::Error;
 use std::fs::File;
 use std::io::Read;
@@ -21,7 +14,6 @@ macro_rules! bail {
 }
 
 fn main() {
-    let algo = algorithm::Algo::default();
     let mut args = ::std::env::args();
     let _ = args.next();
 
@@ -38,7 +30,7 @@ fn main() {
         .next()
         .unwrap_or("1")
         .parse()
-        .expect("Failed to parse a part number from the puzzle");;
+        .expect("Failed to parse a part number from the puzzle");
 
     let file_path = args
         .next()
@@ -49,22 +41,21 @@ fn main() {
     file.read_to_string(&mut input)
         .expect("Failed reading file");
 
-    let output = algo.apply(AlgoInput::Json(Cow::Owned(json!({
-        "day": day,
-        "part": part,
-        "input": input.trim(),
-    }))));
+    let output = aoc::apply(aoc::Input {
+        day,
+        part,
+        input: input.trim().to_owned(),
+    });
     match output {
-        Ok(AlgoOutput::Json(res)) => println!("{}", res),
-        Ok(_) => unimplemented!(),
+        Ok(res) => println!("{}", res),
         Err(err) => print_cause_chain(&*err),
     }
 }
 
-fn print_cause_chain(err: &Error) {
+fn print_cause_chain(err: &dyn Error) {
     let mut causes = vec![err.to_string()];
     let mut e = err;
-    while let Some(cause) = e.cause() {
+    while let Some(cause) = e.source() {
         causes.push(cause.to_string());
         e = cause;
     }
