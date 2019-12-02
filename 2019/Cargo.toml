@@ -1,0 +1,28 @@
+[package]
+name = "aoc2019"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+name = "aoc"
+
+[dependencies]
+base64 = "0.11.0"
+serde = "1.0.103"
+serde_derive = "1.0.103"
+serde_json = "1.0.42"
+fxhash = "0.2.1"
+regex = "1.3.1"
+matrix = "0.22.0"
+lazy_static = "1.4.0"
+linked-list = "0.0.3"
+rayon = "1.2.1"
+petgraph = "0.4.13"
+daggy = "0.6.0"
+bitvec = "0.16.0"
+anyhow = "1.0.25"
+paste = "0.1.6"
+
+[features]
+default = []
+bench = []

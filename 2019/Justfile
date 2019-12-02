@@ -1,0 +1,20 @@
+test day:
+  cargo test day{{day}}::test
+
+bench day:
+  cargo bench --features bench day{{day}}::test::bench
+
+fetch day:
+  @curl --cookie 'session={{env_var("AOC_TOKEN")}}' https://adventofcode.com/2019/day/{{day}}/input -o inputs/day-{{day}}.txt
+  tail inputs/day-{{day}}.txt
+
+tdd day:
+  cargo watch -x 'test day{{day}}::test'
+
+template day:
+  @test -f src/day{{day}}.rs || (cat template.rs | sed 's/DAY/{{day}}/g' > src/day{{day}}.rs && echo 'src/{{day}}.rs created')
+
+run puzzle file='':
+  @cargo build --release
+  @target/release/aoc {{puzzle}} {{file}}
+
