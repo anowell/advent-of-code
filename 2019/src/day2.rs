@@ -18,6 +18,7 @@ pub fn part1(input: &str) -> Result<u32> {
 
 pub fn part2(input: &str) -> Result<u32> {
     let intcodes: Vec<usize> = util::split_parse(input, ',')?;
+    // Fixed input from the problem description
     Ok(solve(intcodes, 19690720))
 }
 
@@ -33,7 +34,7 @@ fn solve(intcodes: Vec<usize>, target: u32) -> u32 {
             intcodes[1] = noun;
             intcodes[2] = verb;
             if execute(intcodes) == target {
-                // magic formulat for proving that we have the right noun/verb
+                // magic formula for proving that we have the right noun/verb
                 return (100 * noun + verb) as u32;
             }
         }
@@ -47,16 +48,13 @@ fn execute(intcodes: Vec<usize>) -> u32 {
     let mut code = intcodes[cursor];
 
     // Beware: this doesn't bounds check. Lots of ways this could go wrong
-    // 99: Exit opcode
     while code != OP_EXIT {
         let src1 = intcodes[cursor+1];
         let src2 = intcodes[cursor+2];
         let dest = intcodes[cursor+3];
         // println!("code {}, {} {} => {}", code, intcodes[src1], intcodes[src2], dest);
         intcodes[dest] = match code {
-            // 1: add opcode
             OP_ADD => intcodes[src1] + intcodes[src2],
-            // 2: multiply opcode
             OP_MULT => intcodes[src1] * intcodes[src2],
             _ => unreachable!(format!("Invalid code {}", code)),
         };
