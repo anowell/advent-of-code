@@ -17,5 +17,5 @@ watch day:
     cargo watch -x "check --example day{{day}}" -x "test --example day{{day}}"
 
 scaffold day:
-    path_exists("inputs/day{{day}}") || cp template.rs inputs/day{{day}}
-    sed -i 's|dayX|day{{day}}|g' inputs/day{{day}}
+    cp -n template.rs examples/day{{day}}.rs
+    sed -i 's|dayX|day{{day}}|g' examples/day{{day}}.rs

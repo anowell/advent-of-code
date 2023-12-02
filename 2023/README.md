@@ -15,14 +15,24 @@ SESSION="..."
 Run tests, benchmark, fetch input, run puzzle:
 
 ```
-just watch 1
-just test 1
-just fetch 1
-just bench 1
+# Scaffold new example file for Day 2
+just scaffold 2
 
-# day1 part1
-just run 1 1
+# Watch: recompile & retest Day 2 solution after every change
+just watch 2
 
-# day1 part 2
+# Run tests for Day 2
+just test 2
+
+# Download puzzle input for day 2 (requires setting SESSION)
+just fetch 2
+
+# Run benchmarks for Day 2
+just bench 2
+
+# Run Day 2, Part 1 using the downloaded input
+just run 2 1
+
+# Run Day 2, Part 2 using the downloaded input
 just run 1 2
 ```

@@ -1,61 +1,79 @@
-use crate::util;
-use anyhow::Result;
+use anyhow::{anyhow as err, Result};
+use once_cell::sync::Lazy;
+use regex::Regex;
 
-fn main() -> Result<()> {
+aoc::setup!("dayX");
 
-}
+static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"PATTERN").unwrap());
 
 pub fn part1(input: &str) -> Result<u32> {
-    // let val = util::parse_lines(input)?;
-    unimplemented!("Day DAY Part 1 not implemented")
+    input
+        .trim()
+        .lines()
+        .map(helper)
+        .try_fold(0, |acc, res| res.map(|val| acc + val))
 }
 
 pub fn part2(input: &str) -> Result<u32> {
-    // let val = util::parse_lines(input)?;
-    unimplemented!("Day DAY Part 2 not implemented")
+    input
+        .trim()
+        .lines()
+        .map(helper)
+        .try_fold(0, |acc, res| res.map(|val| acc + val))
 }
 
-fn helper(val: u32) -> u32  {
-    unimplemented!("helper not implemented")
+fn helper(line: &str) -> Result<u32> {
+    todo!("Implement helper")
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-
-    const sample: &str = r#"\"#;
+    use indoc::indoc;
 
     #[test]
     fn test_helper() {
-        assert_eq!(helper(), 0);
+        assert_eq!(helper("sample").unwrap(), EXPECTED);
+        assert_eq!(helper("sample2").unwrap(), EXPECTED);
     }
+
+    const SAMPLE: &str = indoc! {"
+        sample
+        line
+        data
+    "};
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(sample), 0);
+        assert_eq!(part1(SAMPLE).unwrap(), EXPECTED);
     }
+
+    const SAMPLE2: &str = indoc! {"
+        more
+        sample
+        data
+    "};
 
     #[test]
     fn test_part2() {
-      assert_eq!(part2(sample), 0);
-  }
+        assert_eq!(part2(SAMPLE2).unwrap(), EXPECTED);
+    }
 }
+
 
 #[cfg(feature = "bench")]
 mod bench {
-    use criterion::{black_box, criterion_group, criterion_main, Criterion};
+    use super::*;
 
-    fn bench_part1(c: &mut Criterion) {
-        let input = ::std::fs::read_to_string("inputs/dayDAY").expect("Unable to open file");
-        c.bench_function("day DAY-1", |b| b.iter(|| part1(&input).unwrap()));
+    #[divan::bench]
+    fn bench_part1(bencher: divan::Bencher) {
+        let input = input("dayX").unwrap();
+        bencher.bench(|| part1(&input).unwrap());
     }
 
-    fn bench_part2(c: &mut Criterion) {
-        let input = ::std::fs::read_to_string("inputs/dayDAY").expect("Unable to open file");
-        c.bench_function("day DAY-2", |b| b.iter(|| part1(&input).unwrap()));
+    #[divan::bench]
+    fn bench_part2(bencher: divan::Bencher) {
+        let input = input("dayX").unwrap();
+        bencher.bench(|| part2(&input).unwrap());
     }
-
-    criterion_group!(benches, bench_part1, bench_part2);
-    criterion_main!(benches);
 }
-
