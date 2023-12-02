@@ -2,7 +2,7 @@ use anyhow::{anyhow as err, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 
-aoc::aoc! {}
+aoc::setup!("day1");
 
 pub fn part1(input: &str) -> Result<u32> {
     input
@@ -129,13 +129,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = ::std::fs::read_to_string("inputs/day1").expect("Unable to open file");
+        let input = input("day1").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = ::std::fs::read_to_string("inputs/day1").expect("Unable to open file");
+        let input = input("day1").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

@@ -6,11 +6,11 @@ pub mod parse;
 
 // Macro to setup main (to run or benchmark the example)
 #[macro_export]
-macro_rules! aoc {
-    () => {
+macro_rules! setup {
+    ($input:literal) => {
         #[cfg(not(feature = "bench"))]
         fn main() -> Result<()> {
-            aoc::run(part1, part2)
+            aoc::run($input, part1, part2)
         }
 
         #[cfg(feature = "bench")]
@@ -20,8 +20,17 @@ macro_rules! aoc {
     };
 }
 
+pub fn input(fname: &str) -> Result<String> {
+    let path = format!("inputs/{fname}");
+    fs::read_to_string(path).context("Unable to open input file")
+}
+
 // Runner boilerplate
-pub fn run<T>(fn1: impl Fn(&str) -> Result<T>, fn2: impl Fn(&str) -> Result<T>) -> Result<()>
+pub fn run<T>(
+    fname: &str,
+    fn1: impl Fn(&str) -> Result<T>,
+    fn2: impl Fn(&str) -> Result<T>,
+) -> Result<()>
 where
     T: Display,
 {
@@ -34,7 +43,7 @@ where
         None => (true, true),
     };
 
-    let input = fs::read_to_string("inputs/day1").context("Unable to open input file")?;
+    let input = input(fname)?;
     if part1 {
         println!("Part 1: {}", fn1(&input)?);
     }
@@ -43,4 +52,3 @@ where
     }
     Ok(())
 }
-

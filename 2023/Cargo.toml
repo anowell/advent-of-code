@@ -22,7 +22,6 @@ indoc = "2.0"
 name = "aoc1"
 path = "examples/day1.rs"
 harness = false
-features = ["bench"]
 
 [features]
 default = []
