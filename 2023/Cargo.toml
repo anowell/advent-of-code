@@ -18,11 +18,17 @@ serde_json = "1.0.108"
 divan = "0.1"
 indoc = "2.0"
 
-[[bench]]
-name = "aoc1"
-path = "examples/day1.rs"
-harness = false
-
 [features]
 default = []
 bench = []
+
+[[bench]]
+name = "day1"
+path = "examples/day1.rs"
+harness = false
+
+[[bench]]
+name = "day2"
+path = "examples/day2.rs"
+harness = false
+

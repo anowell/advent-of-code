@@ -129,13 +129,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = input("day1").unwrap();
+        let input = aoc::input("day1").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = input("day1").unwrap();
+        let input = aoc::input("day1").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

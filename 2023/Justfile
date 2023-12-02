@@ -1,14 +1,24 @@
 set dotenv-load
 
-run day part='':
+run day part='': (test day)
     cargo run --release --example day{{day}} -- {{part}}
+
+check day:
+    cargo check --example day{{day}}
 
 test day:
     cargo test --lib
     cargo test --example day{{day}}
 
+test-all:
+    cargo test --lib
+    cargo test --examples
+
 bench day:
-    cargo bench aoc{{day}} --features bench
+    cargo bench day{{day}} --features bench
+
+bench-all:
+    cargo bench --benches --features bench
 
 fetch day:
     curl -o inputs/day{{day}} --cookie "session=${AOC_SESSION}" https://adventofcode.com/2023/day/{{day}}/input
