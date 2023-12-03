@@ -1,41 +1,38 @@
-use anyhow::{anyhow as err, Result};
+use anyhow::Result;
 use once_cell::sync::Lazy;
 use regex::Regex;
 
 aoc::setup!("dayX");
 
-static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"PATTERN").unwrap());
-
 pub fn part1(input: &str) -> Result<u32> {
-    input
-        .trim()
-        .lines()
-        .map(helper)
-        .try_fold(0, |acc, res| res.map(|val| acc + val))
+    let lines = aoc::parse::parse_lines::<Line>(input)?;
+    todo!("Implement Part1");
 }
 
 pub fn part2(input: &str) -> Result<u32> {
-    input
-        .trim()
-        .lines()
-        .map(helper)
-        .try_fold(0, |acc, res| res.map(|val| acc + val))
+    let lines = aoc::parse::parse_lines::<Line>(input)?;
+    todo!("Implement Part2");
 }
 
-fn helper(line: &str) -> Result<u32> {
-    todo!("Implement helper")
+#[derive(Debug, Clone)]
+struct Line {}
+
+static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"PATTERN").unwrap());
+
+impl FromStr for Line {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        let caps = RE.captures(s).ok_or_else(|| err!("Invalid line: {s}"))?;
+
+        todo!("Implement Line::from_str")
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     use indoc::indoc;
-
-    #[test]
-    fn test_helper() {
-        assert_eq!(helper("sample").unwrap(), EXPECTED);
-        assert_eq!(helper("sample2").unwrap(), EXPECTED);
-    }
 
     const SAMPLE: &str = indoc! {"
         sample
@@ -44,20 +41,21 @@ mod test {
     "};
 
     #[test]
-    fn test_part1() {
-        assert_eq!(part1(SAMPLE).unwrap(), EXPECTED);
+    fn test_parse() {
+        let sample = "TODO";
+        let line = Line::from_str(sample);
+        assert_eq(line, Line{});
     }
-
-    const SAMPLE2: &str = indoc! {"
-        more
-        sample
-        data
-    "};
 
     #[test]
-    fn test_part2() {
-        assert_eq!(part2(SAMPLE2).unwrap(), EXPECTED);
+    fn test_part1() {
+        assert_eq!(part1(SAMPLE).unwrap(), 0);
     }
+
+    // #[test]
+    // fn test_part2() {
+    //     assert_eq!(part2(SAMPLE).unwrap(), 0);
+    // }
 }
 
 

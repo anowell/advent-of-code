@@ -13,12 +13,7 @@ static RE_GAME: Lazy<Regex> = Lazy::new(|| Regex::new(r"Game (\d*): (.*)").unwra
 
 pub fn part1(input: &str) -> Result<u32> {
     let complete = CubeSet::new(12, 13, 14);
-
-    let games = input
-        .trim()
-        .lines()
-        .map(Game::from_str)
-        .collect::<Result<Vec<_>>>()?;
+    let games = aoc::parse::parse_lines::<Game>(input)?;
     let sum = games
         .into_iter()
         .filter(|g| g.is_possible_with(&complete))
@@ -28,12 +23,7 @@ pub fn part1(input: &str) -> Result<u32> {
 }
 
 pub fn part2(input: &str) -> Result<u32> {
-    let games = input
-        .trim()
-        .lines()
-        .map(Game::from_str)
-        .collect::<Result<Vec<_>>>()?;
-
+    let games = aoc::parse::parse_lines::<Game>(input)?;
     let sum = games
         .iter()
         .map(Game::min_superset)

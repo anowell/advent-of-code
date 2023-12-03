@@ -15,7 +15,7 @@ where
 }
 
 // split_parse("foo, bar; baz", Regex::new(r"[,;\n]").unwrap())
-pub fn split_parse<F>(input: &str, re: &Regex) -> Result<Vec<F>, <F as FromStr>::Err>
+pub fn parse_regex_split<F>(input: &str, re: &Regex) -> Result<Vec<F>, <F as FromStr>::Err>
 where
     F: FromStr,
 {
@@ -24,7 +24,6 @@ where
         .map(str::parse)
         .collect()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -35,7 +34,7 @@ mod tests {
     fn test_split_parse() {
         let sample = "1, 2, 3\n4, 5, 6";
         let re = Regex::new(r"[,\n]").unwrap();
-        let result = split_parse::<u32>(sample, &re).unwrap();
+        let result = parse_regex_split::<u32>(sample, &re).unwrap();
         assert_eq!(result, vec![1,2,3,4,5,6]);
     }
 }
