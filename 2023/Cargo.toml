@@ -36,3 +36,8 @@ harness = false
 name = "day3"
 path = "examples/day3.rs"
 harness = false
+
+[[bench]]
+name = "day4"
+path = "examples/day4.rs"
+harness = false
