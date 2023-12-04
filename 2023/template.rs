@@ -1,16 +1,15 @@
-use anyhow::Result;
+use anyhow::{Result, Error, format_err};
 use once_cell::sync::Lazy;
 use regex::Regex;
-
-aoc::setup!("dayX");
+use std::str::FromStr;
 
 pub fn part1(input: &str) -> Result<u32> {
-    let lines = aoc::parse::parse_lines::<Line>(input)?;
+    let _lines = crate::parse::parse_lines::<Line>(input)?;
     todo!("Implement Part1");
 }
 
 pub fn part2(input: &str) -> Result<u32> {
-    let lines = aoc::parse::parse_lines::<Line>(input)?;
+    let _lines = crate::parse::parse_lines::<Line>(input)?;
     todo!("Implement Part2");
 }
 
@@ -23,8 +22,7 @@ impl FromStr for Line {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        let caps = RE.captures(s).ok_or_else(|| err!("Invalid line: {s}"))?;
-
+        let _caps = RE.captures(s).ok_or_else(|| format_err!("Invalid line: {s}"))?;
         todo!("Implement Line::from_str")
     }
 }
@@ -65,13 +63,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = aoc::input("dayX").unwrap();
+        let input = crate::input("dayX").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = aoc::input("dayX").unwrap();
+        let input = crate::input("dayX").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

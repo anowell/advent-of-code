@@ -3,10 +3,9 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{collections::BTreeSet, str::FromStr};
 use Result as StdResult;
-aoc::setup!("day4");
 
 pub fn part1(input: &str) -> Result<u32> {
-    let cards = aoc::parse::parse_lines::<Card>(input)?;
+    let cards = crate::parse::parse_lines::<Card>(input)?;
     Ok(cards.iter().map(Card::points).sum())
 }
 
@@ -16,7 +15,7 @@ pub fn part2(input: &str) -> Result<u32> {
 }
 
 fn card_counts(input: &str) -> Result<Vec<u32>> {
-    let cards = aoc::parse::parse_lines::<Card>(input)?;
+    let cards = crate::parse::parse_lines::<Card>(input)?;
     let mut card_counts = vec![1; cards.len()];
 
     for (i, card) in cards.iter().enumerate() {
@@ -70,7 +69,7 @@ impl FromStr for Card {
     }
 }
 
-#[cfg(all(test, not(feature = "bench")))]
+#[cfg(test)]
 mod test {
     use super::*;
     use indoc::indoc;
@@ -128,13 +127,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = aoc::input("day4").unwrap();
+        let input = crate::input("day4").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = aoc::input("day4").unwrap();
+        let input = crate::input("day4").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

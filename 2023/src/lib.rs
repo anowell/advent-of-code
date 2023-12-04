@@ -1,54 +1,40 @@
-use std::{env, fmt::Display, fs};
-
-use anyhow::{bail, Context, Result};
-
 pub mod parse;
+use anyhow::Context;
+use serde_json::{json, Value};
 
-// Macro to setup main (to run or benchmark the example)
-#[macro_export]
-macro_rules! setup {
-    ($input:literal) => {
-        #[cfg(not(feature = "bench"))]
-        fn main() -> Result<()> {
-            aoc::run($input, part1, part2)
-        }
-
-        #[cfg(feature = "bench")]
-        fn main() {
-            divan::main();
-        }
-    };
+#[derive(Debug, Clone)]
+pub struct Input {
+    pub day: u32,
+    pub part: u32,
+    pub input: String,
 }
 
-pub fn input(fname: &str) -> Result<String> {
+// Macro to avoid manually implementing the wrapper for every puzzle
+// For each day specified in handle_days!(), this expects to find a
+// dayN.rs file containing part1 and part2 functions
+macro_rules! handle_days {
+    ($($day:literal),*) => {
+        paste::item! {
+            $(pub mod [<day $day>];)*
+            pub fn apply(input: Input) -> anyhow::Result<Value> {
+                match (input.day, input.part) {
+                    $(
+                        ($day, 1) => Ok(json!([<day $day>]::part1(&input.input)?)),
+                        ($day, 2) => Ok(json!([<day $day>]::part2(&input.input)?)),
+                    )*
+                    _ => anyhow::bail!("Puzzle '{}-{}' not supported", input.day, input.part),
+                }
+            }
+        }
+
+    }
+}
+
+// Simply specify the days that are implemented
+handle_days![1, 2, 3, 4];
+
+
+pub fn input(fname: &str) -> anyhow::Result<String> {
     let path = format!("inputs/{fname}");
-    fs::read_to_string(path).context("Unable to open input file")
-}
-
-// Runner boilerplate
-pub fn run<T>(
-    fname: &str,
-    fn1: impl Fn(&str) -> Result<T>,
-    fn2: impl Fn(&str) -> Result<T>,
-) -> Result<()>
-where
-    T: Display,
-{
-    let mut args = env::args();
-    let _ = args.next();
-    let (part1, part2) = match args.next().as_deref() {
-        Some("1") => (true, false),
-        Some("2") => (false, true),
-        Some(val) => bail!("Don't understand arg: {val}"),
-        None => (true, true),
-    };
-
-    let input = input(fname)?;
-    if part1 {
-        println!("Part 1: {}", fn1(&input)?);
-    }
-    if part2 {
-        println!("Part 2: {}", fn2(&input)?);
-    }
-    Ok(())
+    std::fs::read_to_string(path).context("Unable to open input file")
 }

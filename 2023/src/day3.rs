@@ -3,8 +3,6 @@ use anyhow::Result;
 use once_cell::sync::Lazy;
 use regex::{Match, Regex};
 
-aoc::setup!("day3");
-
 pub fn part1(input: &str) -> Result<u32> {
     let schematic = Schematic::new(input);
     Ok(schematic.part_numbers().iter().sum())
@@ -231,13 +229,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = aoc::input("day3").unwrap();
+        let input = crate::input("day3").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = aoc::input("day3").unwrap();
+        let input = crate::input("day3").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

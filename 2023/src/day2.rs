@@ -7,13 +7,12 @@ use anyhow::{anyhow as err, bail, Error, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 
-aoc::setup!("day2");
 
 static RE_GAME: Lazy<Regex> = Lazy::new(|| Regex::new(r"Game (\d*): (.*)").unwrap());
 
 pub fn part1(input: &str) -> Result<u32> {
     let complete = CubeSet::new(12, 13, 14);
-    let games = aoc::parse::parse_lines::<Game>(input)?;
+    let games = crate::parse::parse_lines::<Game>(input)?;
     let sum = games
         .into_iter()
         .filter(|g| g.is_possible_with(&complete))
@@ -23,7 +22,7 @@ pub fn part1(input: &str) -> Result<u32> {
 }
 
 pub fn part2(input: &str) -> Result<u32> {
-    let games = aoc::parse::parse_lines::<Game>(input)?;
+    let games = crate::parse::parse_lines::<Game>(input)?;
     let sum = games
         .iter()
         .map(Game::min_superset)
@@ -245,13 +244,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = aoc::input("day2").unwrap();
+        let input = crate::input("day2").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = aoc::input("day2").unwrap();
+        let input = crate::input("day2").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

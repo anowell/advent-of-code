@@ -1,31 +1,32 @@
 set dotenv-load
 
-run day part='': (test day)
-    cargo run --release --example day{{day}} -- {{part}}
+# Check compiles
+check:
+    cargo check
 
-check day:
-    cargo check --example day{{day}}
+# Run solution for specific day
+run day part='1': (test day)
+    cargo run --release --bin aoc -- {{day}}-{{part}}
 
-test day:
-    cargo test --lib
-    cargo test --example day{{day}}
+# Run tests for one of all days
+test day='all':
+    @[ {{day}} == 'all' ] || cargo test day{{day}}:: --lib
+    @[ {{day}} != 'all' ] || cargo test --lib
 
-test-all:
-    cargo test --lib
-    cargo test --examples
+# Run benchmarks for one of all days
+bench day='all':
+    @[ {{day}} == 'all' ] || cargo bench day{{day}}:: --features bench
+    @[ {{day}} != 'all' ] || cargo bench --features bench
 
-bench day:
-    cargo bench day{{day}} --features bench
-
-bench-all:
-    cargo bench --benches --features bench
-
+# Download puzzle input. Requires AOC_SESSION in .env
 fetch day:
     curl -o inputs/day{{day}} --cookie "session=${AOC_SESSION}" https://adventofcode.com/2023/day/{{day}}/input
 
+# Watch for changes; rebuild and retest on changes
 watch day:
-    cargo watch -x "check --example day{{day}}" -x "test --example day{{day}}"
+    cargo watch -x "check" -x "test day{{day}}::"
 
+# Scaffold a dayX.rs file
 scaffold day:
-    cp -n template.rs examples/day{{day}}.rs
-    sed -i 's|dayX|day{{day}}|g' examples/day{{day}}.rs
+    cp -n template.rs src/day{{day}}.rs
+    sed -i 's|dayX|day{{day}}|g' src/day{{day}}.rs
