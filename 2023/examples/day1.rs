@@ -1,4 +1,4 @@
-use anyhow::{anyhow as err, Result};
+use anyhow::{format_err, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 
@@ -25,7 +25,7 @@ fn get_line_val(line: &str) -> Result<u32> {
     let pattern = |c: char| (c >= '0') && (c <= '9');
     let c1 = bytes[line
         .find(pattern)
-        .ok_or_else(|| err!("No digit in {line}"))?];
+        .ok_or_else(|| format_err!("No digit in {line}"))?];
     let c2 = bytes[line.rfind(pattern).unwrap()];
 
     let d1 = (c1 - b'0') as u32;
@@ -38,7 +38,9 @@ static RE: Lazy<Regex> =
 
 fn get_line_val2(line: &str) -> Result<u32> {
     let mut matches = RE.find_iter(&line);
-    let m1 = matches.next().ok_or_else(|| err!("No digit in {line}"))?;
+    let m1 = matches
+        .next()
+        .ok_or_else(|| format_err!("No digit in {line}"))?;
     let mut m2 = matches.last().unwrap_or(m1.clone());
 
     // Special handling for m2 to catch overlapping input like: "twone"

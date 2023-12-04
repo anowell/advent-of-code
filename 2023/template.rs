@@ -44,7 +44,7 @@ mod test {
     fn test_parse() {
         let sample = "TODO";
         let line = Line::from_str(sample);
-        assert_eq(line, Line{});
+        assert_eq!(line, Line{});
     }
 
     #[test]
