@@ -33,7 +33,6 @@ macro_rules! handle_days {
 // Simply specify the days that are implemented
 handle_days![1, 2, 3, 4, 5];
 
-
 pub fn input(fname: &str) -> anyhow::Result<String> {
     let path = format!("inputs/{fname}");
     std::fs::read_to_string(path).context("Unable to open input file")

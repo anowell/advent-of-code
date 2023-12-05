@@ -1,4 +1,4 @@
-use anyhow::{format_err, Context, Result, bail};
+use anyhow::{bail, format_err, Context, Result};
 use std::fs;
 
 fn main() -> Result<()> {

@@ -36,7 +36,7 @@ where
         .find_iter(input)
         .map(|m| m.as_str())
         .map(F::from_str)
-        .collect::<Result<Vec<_>,_>>()
+        .collect::<Result<Vec<_>, _>>()
 }
 
 #[cfg(test)]
@@ -49,6 +49,6 @@ mod tests {
         let sample = "1, 2, 3\n4, 5, 6";
         let re = Regex::new(r"[,\n]").unwrap();
         let result = parse_regex_split::<u32>(sample, &re).unwrap();
-        assert_eq!(result, vec![1,2,3,4,5,6]);
+        assert_eq!(result, vec![1, 2, 3, 4, 5, 6]);
     }
 }
