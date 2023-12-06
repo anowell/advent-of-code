@@ -53,20 +53,7 @@ mod test {
     // }
 }
 
-
 #[cfg(feature = "bench")]
 mod bench {
-    use super::*;
-
-    #[divan::bench]
-    fn bench_part1(bencher: divan::Bencher) {
-        let input = crate::input("dayDAYNUM").unwrap();
-        bencher.bench(|| part1(&input).unwrap());
-    }
-
-    #[divan::bench]
-    fn bench_part2(bencher: divan::Bencher) {
-        let input = crate::input("dayDAYNUM").unwrap();
-        bencher.bench(|| part2(&input).unwrap());
-    }
+    bench_day!(DAYNUM);
 }
