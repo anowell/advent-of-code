@@ -1,3 +1,5 @@
+//! [Advent of Code Day 2](https://adventofcode.com/2023/day/2)
+
 use std::{
     cmp::{self, Ordering},
     str::FromStr,
@@ -10,6 +12,7 @@ use regex::Regex;
 
 static RE_GAME: Lazy<Regex> = Lazy::new(|| Regex::new(r"Game (\d*): (.*)").unwrap());
 
+/// Calculates the sum of game IDs that can be played with 12 red, 13 blue, & 14 green cubes
 pub fn part1(input: &str) -> Result<u32> {
     let complete = CubeSet::new(12, 13, 14);
     let games = crate::parse::parse_lines::<Game>(input)?;
@@ -21,6 +24,7 @@ pub fn part1(input: &str) -> Result<u32> {
     Ok(sum)
 }
 
+/// Calculates the power of the minimum set of cubes needed for a cube-drawing game
 pub fn part2(input: &str) -> Result<u32> {
     let games = crate::parse::parse_lines::<Game>(input)?;
     let sum = games
@@ -32,18 +36,18 @@ pub fn part2(input: &str) -> Result<u32> {
 }
 
 #[derive(Debug, Clone)]
-struct Game {
-    id: u32,
-    draws: Vec<CubeSet>,
+pub struct Game {
+    pub id: u32,
+    pub draws: Vec<CubeSet>,
 }
 
 impl Game {
-    fn is_possible_with(&self, complete: &CubeSet) -> bool {
+    pub fn is_possible_with(&self, complete: &CubeSet) -> bool {
         self.draws.iter().all(|d| d < complete)
     }
 
     // Min superset is the smallest cubeset where is_possible_with returns true
-    fn min_superset(&self) -> CubeSet {
+    pub fn min_superset(&self) -> CubeSet {
         let mut min_set = self.draws[0];
         for draw in self.draws.iter().skip(1) {
             min_set.red = cmp::max(draw.red, min_set.red);
@@ -105,19 +109,19 @@ impl FromStr for CubeSet {
 }
 
 #[derive(PartialEq, Debug, Copy, Clone)]
-struct CubeSet {
-    red: u32,
-    green: u32,
-    blue: u32,
+pub struct CubeSet {
+    pub red: u32,
+    pub green: u32,
+    pub blue: u32,
 }
 
 impl CubeSet {
-    fn new(red: u32, green: u32, blue: u32) -> CubeSet {
+    pub fn new(red: u32, green: u32, blue: u32) -> CubeSet {
         CubeSet { red, green, blue }
     }
 
-    // AoC defined the power of a set of cubes as equal to the color counts multipled
-    fn power(&self) -> u32 {
+    /// The power of a set of cubes as equal to the color counts multipled
+    pub fn power(&self) -> u32 {
         self.red * self.green * self.blue
     }
 }

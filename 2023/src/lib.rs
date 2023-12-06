@@ -1,8 +1,11 @@
-pub mod parse;
 use anyhow::Context;
 use serde_json::{json, Value};
 
+pub mod parse;
+pub mod math;
+
 #[derive(Debug, Clone)]
+/// Specifies the puzzle and puzzle input to run
 pub struct Input {
     pub day: u32,
     pub part: u32,
@@ -16,6 +19,8 @@ macro_rules! handle_days {
     ($($day:literal),*) => {
         paste::item! {
             $(pub mod [<day $day>];)*
+
+            /// Wrapper function that calls a particular puzzle and prints the result
             pub fn apply(input: Input) -> anyhow::Result<Value> {
                 match (input.day, input.part) {
                     $(
@@ -33,6 +38,7 @@ macro_rules! handle_days {
 // Simply specify the days that are implemented
 handle_days![1, 2, 3, 4, 5, 6];
 
+/// Helper to read a given input file into a string
 pub fn input(fname: &str) -> anyhow::Result<String> {
     let path = format!("inputs/{fname}");
     std::fs::read_to_string(path).context("Unable to open input file")

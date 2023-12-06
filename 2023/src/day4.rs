@@ -1,14 +1,18 @@
+//! [Advent of Code Day 4](https://adventofcode.com/2023/day/4)
+
 use anyhow::{bail, Error, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{collections::BTreeSet, str::FromStr};
 use itertools::Itertools;
 
+/// Calculates the total points for a set of scratchcards
 pub fn part1(input: &str) -> Result<u32> {
     let cards = crate::parse::parse_lines::<Card>(input)?;
     Ok(cards.iter().map(Card::points).sum())
 }
 
+/// Count total scratchcards where scratchcards win more scratchards
 pub fn part2(input: &str) -> Result<u32> {
     let counts = card_counts(input)?;
     Ok(counts.iter().sum())
@@ -28,19 +32,22 @@ fn card_counts(input: &str) -> Result<Vec<u32>> {
 }
 
 #[derive(Debug, Clone)]
-struct Card {
+pub struct Card {
     winners: BTreeSet<u32>,
     numbers: BTreeSet<u32>,
 }
 
 impl Card {
-    fn points(&self) -> u32 {
+    /// Calculates points for a card. 1 point for first match, doubles for each match after
+    pub fn points(&self) -> u32 {
         match self.matches() {
             0 => 0,
             n => 1 << (n - 1),
         }
     }
-    fn matches(&self) -> usize {
+
+    /// Counts number of winning numbers that match your numbers on a scratchcard
+    pub fn matches(&self) -> usize {
         self.winners.intersection(&self.numbers).count()
     }
 }

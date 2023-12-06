@@ -29,4 +29,4 @@ watch day:
 # Scaffold a dayX.rs file
 scaffold day:
     cp -n template.rs src/day{{day}}.rs
-    sed -i 's|dayX|day{{day}}|g' src/day{{day}}.rs
+    sed -i 's|DAYNUM|{{day}}|g' src/day{{day}}.rs

@@ -1,15 +1,15 @@
+//! [Advent of Code Day DAYNUM](https://adventofcode.com/2023/day/DAYNUM)
+
 use anyhow::{Result, Error, format_err};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::str::FromStr;
 
 pub fn part1(input: &str) -> Result<u32> {
-    let _lines = crate::parse::parse_lines::<Line>(input)?;
     todo!("Implement Part1");
 }
 
 pub fn part2(input: &str) -> Result<u32> {
-    let _lines = crate::parse::parse_lines::<Line>(input)?;
     todo!("Implement Part2");
 }
 
@@ -34,15 +34,12 @@ mod test {
 
     const SAMPLE: &str = indoc! {"
         sample
-        line
         data
     "};
 
     #[test]
     fn test_parse() {
-        let sample = "TODO";
-        let line = Line::from_str(sample);
-        assert_eq!(line, Line{});
+        assert_eq!(true, false);
     }
 
     #[test]
@@ -63,13 +60,13 @@ mod bench {
 
     #[divan::bench]
     fn bench_part1(bencher: divan::Bencher) {
-        let input = crate::input("dayX").unwrap();
+        let input = crate::input("dayDAYNUM").unwrap();
         bencher.bench(|| part1(&input).unwrap());
     }
 
     #[divan::bench]
     fn bench_part2(bencher: divan::Bencher) {
-        let input = crate::input("dayX").unwrap();
+        let input = crate::input("dayDAYNUM").unwrap();
         bencher.bench(|| part2(&input).unwrap());
     }
 }

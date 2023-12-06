@@ -1,14 +1,18 @@
+//! [Advent of Code Day 3](https://adventofcode.com/2023/day/3)
+
 use std::cmp;
 use anyhow::Result;
 use once_cell::sync::Lazy;
 use regex::{Match, Regex};
 use itertools::Itertools;
 
+/// Calculates the sum of part numbers in the schematic
 pub fn part1(input: &str) -> Result<u32> {
     let schematic = Schematic::new(input);
     Ok(schematic.part_numbers().iter().sum())
 }
 
+/// Calculates the sum of gear ratios in the schematic
 pub fn part2(input: &str) -> Result<u32> {
     let schematic = Schematic::new(input);
     Ok(schematic.gears().iter().map(Gear::ratio).sum())
@@ -17,7 +21,7 @@ pub fn part2(input: &str) -> Result<u32> {
 #[derive(Debug, Clone, PartialEq)]
 // Schematic that provides (x,y) matrix representation of the input
 // (0,0) is visually the top-left
-struct Schematic {
+pub struct Schematic {
     buf: String,
     cols: usize,
     rows: usize,
@@ -27,7 +31,7 @@ static RE_NUM: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
 static RE_SYM: Lazy<Regex> = Lazy::new(|| Regex::new(r"[^\w\.\s]+").unwrap());
 
 impl Schematic {
-    fn new(s: &str) -> Schematic {
+    pub fn new(s: &str) -> Schematic {
         let cols = s.lines().next().unwrap().len();
         let rows = s.lines().count();
         Schematic {
@@ -37,7 +41,7 @@ impl Schematic {
         }
     }
 
-    fn part_numbers(&self) -> Vec<u32> {
+    pub fn part_numbers(&self) -> Vec<u32> {
         let part_filter = |m: &Match| {
             let (x, y) = (m.start() % (self.cols + 1), m.start() / (self.cols + 1));
             self.has_adjacent_symbol(x, y, m.len())
@@ -50,7 +54,7 @@ impl Schematic {
         nums
     }
 
-    fn gears(&self) -> Vec<Gear> {
+    pub fn gears(&self) -> Vec<Gear> {
         let nums = RE_NUM
             .find_iter(&self.buf)
             .map(|m| Num {
@@ -115,10 +119,10 @@ impl Schematic {
 }
 
 #[derive(Debug, Clone, Copy)]
-struct Gear(u32, u32);
+pub struct Gear(u32, u32);
 
 impl Gear {
-    fn ratio(&self) -> u32 {
+    pub fn ratio(&self) -> u32 {
         self.0 * self.1
     }
 }

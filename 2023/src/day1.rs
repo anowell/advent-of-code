@@ -1,7 +1,10 @@
+//! [Advent of Code Day 1](https://adventofcode.com/2023/day/1)
+
 use anyhow::{format_err, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 
+/// Calculates the sum of calibration values (digits only)
 pub fn part1(input: &str) -> Result<u32> {
     input
         .trim()
@@ -10,6 +13,7 @@ pub fn part1(input: &str) -> Result<u32> {
         .try_fold(0, |acc, res| res.map(|val| acc + val))
 }
 
+/// Calculates the sum of calibration values (digits and words only)
 pub fn part2(input: &str) -> Result<u32> {
     input
         .trim()
@@ -42,6 +46,7 @@ fn get_line_val2(line: &str) -> Result<u32> {
     let mut m2 = matches.last().unwrap_or(m1.clone());
 
     // Special handling for m2 to catch overlapping input like: "twone"
+    // Could avoid by using Aho-Corasick algorithm instead
     for i in (m2.start() + 1)..line.len() {
         if let Some(m) = RE.find_at(&line, i) {
             m2 = m;

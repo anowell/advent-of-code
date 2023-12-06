@@ -1,8 +1,11 @@
+//! [Advent of Code Day 5](https://adventofcode.com/2023/day/5)
+
 use anyhow::{format_err, Error, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{cmp, ops::Range, str::FromStr};
 
+/// Find the smallest seed location in the almanac
 pub fn part1(input: &str) -> Result<u32> {
     let almanac = Almanac::from_str(input)?;
     almanac
@@ -12,6 +15,7 @@ pub fn part1(input: &str) -> Result<u32> {
         .ok_or_else(|| format_err!("No seeds to lookup"))
 }
 
+/// Find the smallest seed location in the almanac using seed ranges
 pub fn part2(input: &str) -> Result<u32> {
     let almanac = Almanac::from_str(input)?;
     almanac
@@ -23,15 +27,15 @@ pub fn part2(input: &str) -> Result<u32> {
 }
 
 #[derive(Debug)]
-struct Almanac {
+pub struct Almanac {
     seeds: Vec<u32>,
     maps: Vec<Map>,
 }
 
 impl Almanac {
-    // Iterates through the maps to find the location of each seed
-    // assumes maps are in lookup order, e.g. "seed-to-soil", then "soil-to-fertilizer", etc.
-    fn seed_locations(&self) -> Vec<u32> {
+    /// Iterates through the maps to find the location of each seed
+    /// Assumes maps are in lookup order, e.g. "seed-to-soil", then "soil-to-fertilizer", etc.
+    pub fn seed_locations(&self) -> Vec<u32> {
         let mut locations = Vec::new();
         for seed in &self.seeds {
             let mut src = *seed;
@@ -43,9 +47,9 @@ impl Almanac {
         locations
     }
 
-    // Iterates through the maps to find the location ranges corresponding to any of the seed ranges
-    // where the seeds line specifies ranges: "seed_range_start seed_range_len seed_range_start etc."
-    fn ranged_seed_locations(&self) -> Vec<Range<u32>> {
+    /// Iterates through the maps to find the location ranges corresponding to any of the seed ranges
+    /// where the seeds line specifies ranges: "seed_range_start seed_range_len seed_range_start etc."
+    pub fn ranged_seed_locations(&self) -> Vec<Range<u32>> {
         assert!(self.seeds.len() % 2 == 0);
 
         let seeds: Vec<Range<u32>> = self
