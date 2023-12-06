@@ -1,7 +1,6 @@
-use std::str::FromStr;
-
 use once_cell::sync::Lazy;
 use regex::Regex;
+use std::str::FromStr;
 
 pub fn parse_lines<F>(input: &str) -> Result<Vec<F>, <F as FromStr>::Err>
 where
@@ -26,7 +25,7 @@ where
         .collect()
 }
 
-static RE_NUMS: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
+pub static RE_NUMS: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
 
 pub fn extract_nums<F>(input: &str) -> Result<Vec<F>, <F as FromStr>::Err>
 where
@@ -36,7 +35,7 @@ where
         .find_iter(input)
         .map(|m| m.as_str())
         .map(F::from_str)
-        .collect::<Result<Vec<_>, _>>()
+        .collect()
 }
 
 #[cfg(test)]
