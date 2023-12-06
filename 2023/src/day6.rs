@@ -1,7 +1,7 @@
+use crate::parse;
 use anyhow::Result;
-use std::ops::{Deref, RangeInclusive};
-use std::result::Result as StdResult;
 use itertools::Itertools;
+use std::ops::{Deref, RangeInclusive};
 
 pub fn part1(input: &str) -> Result<u64> {
     let races = Races::part1_from_str(input)?;
@@ -42,19 +42,20 @@ struct Race {
 }
 
 impl Race {
-    // record = (racetime - holdtime) * holdtime
-    // 0 = holdime^2 -racetime + record
+    // record = velocity * (racetime - holdtime)
+    // velocity = holdtime
+    // record = holdtime * (racetime - holdtime)
+    // 0 = holdtime^2 - racetime + record
     // Use quadratic equation with: a = 1; b = -racetime; c = record
     fn record_breaking_range(&self) -> RangeInclusive<u64> {
         let time = self.time as f64;
         let distance = self.distance as f64;
         let (solve1, solve2) = quadratic(1.0, -time, distance);
 
-        // We add/sub an incredibly small value (1e-10) so that we can
-        // be sure to get the smallest integers above and below the solutions
-        // this is needed for the cases where solve1 and solve 2 are whole numbers
-        // Might be "more correct" to check .frac() and determine if it's "zero enough"
-        // but this approach seems to work well.
+        // We can't just tie the record, we have to beat it.
+        // So we add/sub an incredibly small value (1e-10) so that we can
+        // be sure to get the smallest integers above and below the solutions.
+        // This is needed for the cases where the quadratic solutions are whole numbers
         ((solve1 + 1e-10).ceil() as u64)..=((solve2 - 1e-10).floor() as u64)
     }
 }
@@ -69,7 +70,7 @@ fn quadratic(a: f64, b: f64, c: f64) -> (f64, f64) {
 
 impl Races {
     fn part1_from_str(s: &str) -> Result<Self> {
-        let mut lines = s.trim().lines().map(crate::parse::extract_nums);
+        let mut lines = s.trim().lines().map(parse::extract_nums);
 
         let times = lines.next().unwrap()?;
         let distances = lines.next().unwrap()?;
@@ -84,12 +85,17 @@ impl Races {
 }
 
 impl Race {
+    #[cfg(test)]
+    fn new(time: u64, distance: u64) -> Race {
+        Race { time, distance }
+    }
+
     fn part2_from_str(s: &str) -> Result<Self> {
         let lines: Vec<u64> = s
             .trim()
             .lines()
             .map(|line| {
-                let nums = crate::parse::RE_NUMS
+                let nums = parse::RE_NUMS
                     .find_iter(line)
                     .map(|m| m.as_str())
                     .collect_vec();
@@ -118,39 +124,15 @@ mod test {
     #[test]
     fn test_parse_part1() {
         let races = Races::part1_from_str(SAMPLE).unwrap();
-        assert_eq!(
-            races[0],
-            Race {
-                time: 7,
-                distance: 9
-            }
-        );
-        assert_eq!(
-            races[1],
-            Race {
-                time: 15,
-                distance: 40
-            }
-        );
-        assert_eq!(
-            races[2],
-            Race {
-                time: 30,
-                distance: 200
-            }
-        );
+        assert_eq!(races[0], Race::new(7, 9));
+        assert_eq!(races[1], Race::new(15, 40));
+        assert_eq!(races[2], Race::new(30, 200));
     }
 
     #[test]
     fn test_parse_part2() {
         let race = Race::part2_from_str(SAMPLE).unwrap();
-        assert_eq!(
-            race,
-            Race {
-                time: 71530,
-                distance: 940200
-            }
-        );
+        assert_eq!(race, Race::new(71530, 940200));
     }
 
     #[test]

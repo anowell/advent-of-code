@@ -2,6 +2,7 @@ use std::cmp;
 use anyhow::Result;
 use once_cell::sync::Lazy;
 use regex::{Match, Regex};
+use itertools::Itertools;
 
 pub fn part1(input: &str) -> Result<u32> {
     let schematic = Schematic::new(input);
@@ -58,7 +59,7 @@ impl Schematic {
                 len: m.as_str().len(),
                 val: m.as_str().parse().unwrap(),
             })
-            .collect::<Vec<_>>();
+            .collect_vec();
 
         let adjacent_parts = |sym_match: Match| {
             nums.iter()
@@ -68,7 +69,7 @@ impl Schematic {
                         sym_match.start() / (self.cols + 1),
                     )
                 })
-                .collect::<Vec<_>>()
+                .collect_vec()
         };
 
         RE_SYM

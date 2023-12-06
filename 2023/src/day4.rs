@@ -2,7 +2,7 @@ use anyhow::{bail, Error, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{collections::BTreeSet, str::FromStr};
-use Result as StdResult;
+use itertools::Itertools;
 
 pub fn part1(input: &str) -> Result<u32> {
     let cards = crate::parse::parse_lines::<Card>(input)?;
@@ -58,12 +58,12 @@ impl FromStr for Card {
         let winners = RE
             .find_iter(parts[0])
             .map(|m| m.as_str().parse::<u32>())
-            .collect::<StdResult<BTreeSet<_>, _>>()?;
+            .try_collect()?;
 
         let numbers = RE
             .find_iter(parts[1])
             .map(|m| m.as_str().parse::<u32>())
-            .collect::<StdResult<BTreeSet<_>, _>>()?;
+            .try_collect()?;
 
         Ok(Card { winners, numbers })
     }

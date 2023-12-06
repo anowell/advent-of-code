@@ -185,6 +185,7 @@ impl FromStr for Almanac {
 mod test {
     use super::*;
     use indoc::indoc;
+    use itertools::Itertools;
 
     const SAMPLE: &str = indoc! {"
         seeds: 79 14 55 13
@@ -262,7 +263,7 @@ mod test {
         let mappings = vec!["20 50 10", "50 70 5"]
             .into_iter()
             .map(|m| m.parse().unwrap())
-            .collect::<Vec<_>>();
+            .collect_vec();
 
         let map = Map {
             src_type: String::new(),

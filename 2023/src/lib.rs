@@ -31,7 +31,7 @@ macro_rules! handle_days {
 }
 
 // Simply specify the days that are implemented
-handle_days![1, 2, 3, 4, 5];
+handle_days![1, 2, 3, 4, 5, 6];
 
 pub fn input(fname: &str) -> anyhow::Result<String> {
     let path = format!("inputs/{fname}");

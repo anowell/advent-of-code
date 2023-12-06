@@ -2,7 +2,7 @@ use std::{
     cmp::{self, Ordering},
     str::FromStr,
 };
-
+use itertools::Itertools;
 use anyhow::{anyhow as err, bail, Error, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -70,7 +70,7 @@ impl FromStr for Game {
             .split(";")
             .map(str::trim)
             .map(CubeSet::from_str)
-            .collect::<Result<Vec<_>>>()?;
+            .try_collect()?;
 
         Ok(Game { id, draws })
     }
