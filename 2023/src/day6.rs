@@ -75,7 +75,7 @@ impl Race {
 
     /// Finds the range of hold times that would beat the current record
     ///
-    /// ```no_run
+    /// ```no_compile
     /// velocity = holdtime
     /// time = holdtime + traveltime
     /// distance = velocity * traveltime
