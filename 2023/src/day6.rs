@@ -3,6 +3,13 @@ use anyhow::Result;
 use itertools::Itertools;
 use std::ops::{Deref, RangeInclusive};
 
+// Day 6 can be solved by hand with regular calculator.
+// Each race can be represented as a quadratic equation.
+// To find how long you have to hold the button to achieve the 9mm record in the 7ms race,
+// Solve: x^2 -7x +9 = 0
+// Solution: x =~ 1.7 and 5.3, so every number between them will break the record.
+// And it works for part 2 if you use a calculator that support 64-bit math
+
 pub fn part1(input: &str) -> Result<u64> {
     let races = Races::part1_from_str(input)?;
     let res = races
@@ -40,12 +47,11 @@ struct Race {
     // This is the record distance
     distance: u64,
 }
-
 impl Race {
     // record = velocity * (racetime - holdtime)
     // velocity = holdtime
     // record = holdtime * (racetime - holdtime)
-    // 0 = holdtime^2 - racetime + record
+    // 0 = holdtime^2 - racetime*holdtime + record
     // Use quadratic equation with: a = 1; b = -racetime; c = record
     fn record_breaking_range(&self) -> RangeInclusive<u64> {
         let time = self.time as f64;
