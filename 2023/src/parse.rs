@@ -4,6 +4,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::str::FromStr;
 
+/// Parses each line into any type implementing `FromStr`
 pub fn parse_lines<F>(input: &str) -> Result<Vec<F>, <F as FromStr>::Err>
 where
     F: FromStr,
@@ -37,12 +38,15 @@ where
         .collect()
 }
 
+/// Regex for matching digits
 pub static RE_NUMS: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
 
+/// Extracts digits from the input string (no parsing)
 pub fn extract_digits(input: &str) -> Vec<&str> {
     RE_NUMS.find_iter(input).map(|m| m.as_str()).collect()
 }
 
+/// Extracts and parses digits from the input string into any type implementing `FromStr`
 pub fn extract_nums<F>(input: &str) -> Result<Vec<F>, <F as FromStr>::Err>
 where
     F: FromStr,
