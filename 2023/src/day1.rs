@@ -24,7 +24,7 @@ pub fn part2(input: &str) -> Result<u32> {
 
 fn get_line_val(line: &str) -> Result<u32> {
     let bytes = line.as_bytes();
-    let pattern = |c: char| (c >= '0') && (c <= '9');
+    let pattern = |c: char| c.is_ascii_digit();
     let c1 = bytes[line
         .find(pattern)
         .ok_or_else(|| format_err!("No digit in {line}"))?];
@@ -39,16 +39,16 @@ static RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"([0-9]|zero|one|two|three|four|five|six|seven|eight|nine)").unwrap());
 
 fn get_line_val2(line: &str) -> Result<u32> {
-    let mut matches = RE.find_iter(&line);
+    let mut matches = RE.find_iter(line);
     let m1 = matches
         .next()
         .ok_or_else(|| format_err!("No digit in {line}"))?;
-    let mut m2 = matches.last().unwrap_or(m1.clone());
+    let mut m2 = matches.last().unwrap_or(m1);
 
     // Special handling for m2 to catch overlapping input like: "twone"
     // Could avoid by using Aho-Corasick algorithm instead
     for i in (m2.start() + 1)..line.len() {
-        if let Some(m) = RE.find_at(&line, i) {
+        if let Some(m) = RE.find_at(line, i) {
             m2 = m;
         }
     }

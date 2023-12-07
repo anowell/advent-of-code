@@ -91,8 +91,8 @@ mod test {
     "};
 
     fn sample_card(n: usize) -> Card {
-        let line = SAMPLE.lines().skip(n).next().unwrap();
-        Card::from_str(&line).unwrap()
+        let line = SAMPLE.lines().nth(n).unwrap();
+        Card::from_str(line).unwrap()
     }
 
     #[test]

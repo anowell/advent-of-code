@@ -174,30 +174,30 @@ mod test {
     #[test]
     fn test_symbol_lookup() {
         let schematic = Schematic::new(SAMPLE);
-        assert_eq!(schematic.has_symbol_at(0, 0), false);
-        assert_eq!(schematic.has_symbol_at(3, 1), true);
-        assert_eq!(schematic.has_symbol_at(6, 3), true);
-        assert_eq!(schematic.has_symbol_at(9, 0), false);
+        assert!(!schematic.has_symbol_at(0, 0));
+        assert!(schematic.has_symbol_at(3, 1));
+        assert!(schematic.has_symbol_at(6, 3));
+        assert!(!schematic.has_symbol_at(9, 0));
     }
 
     #[test]
     fn test_adjacent_symbol() {
         let schematic = Schematic::new(SAMPLE);
-        assert_eq!(schematic.has_adjacent_symbol(0, 0, 1), false);
-        assert_eq!(schematic.has_adjacent_symbol(1, 0, 1), false);
-        assert_eq!(schematic.has_adjacent_symbol(2, 0, 1), true);
-        assert_eq!(schematic.has_adjacent_symbol(3, 0, 1), true);
-        assert_eq!(schematic.has_adjacent_symbol(4, 0, 1), true);
-        assert_eq!(schematic.has_adjacent_symbol(5, 0, 1), false);
-        assert_eq!(schematic.has_adjacent_symbol(1, 0, 2), true);
-        assert_eq!(schematic.has_adjacent_symbol(0, 0, 3), true);
-        assert_eq!(schematic.has_adjacent_symbol(0, 2, 1), false);
-        assert_eq!(schematic.has_adjacent_symbol(0, 1, 3), true);
-        assert_eq!(schematic.has_adjacent_symbol(5, 9, 1), true);
-        assert_eq!(schematic.has_adjacent_symbol(6, 9, 3), true);
-        assert_eq!(schematic.has_adjacent_symbol(7, 9, 3), false);
-        assert_eq!(schematic.has_adjacent_symbol(8, 9, 2), false);
-        assert_eq!(schematic.has_adjacent_symbol(9, 9, 1), false);
+        assert!(!schematic.has_adjacent_symbol(0, 0, 1));
+        assert!(!schematic.has_adjacent_symbol(1, 0, 1));
+        assert!(schematic.has_adjacent_symbol(2, 0, 1));
+        assert!(schematic.has_adjacent_symbol(3, 0, 1));
+        assert!(schematic.has_adjacent_symbol(4, 0, 1));
+        assert!(!schematic.has_adjacent_symbol(5, 0, 1));
+        assert!(schematic.has_adjacent_symbol(1, 0, 2));
+        assert!(schematic.has_adjacent_symbol(0, 0, 3));
+        assert!(!schematic.has_adjacent_symbol(0, 2, 1));
+        assert!(schematic.has_adjacent_symbol(0, 1, 3));
+        assert!(schematic.has_adjacent_symbol(5, 9, 1));
+        assert!(schematic.has_adjacent_symbol(6, 9, 3));
+        assert!(!schematic.has_adjacent_symbol(7, 9, 3));
+        assert!(!schematic.has_adjacent_symbol(8, 9, 2));
+        assert!(!schematic.has_adjacent_symbol(9, 9, 1));
     }
 
     #[test]
@@ -213,7 +213,7 @@ mod test {
         let mut gears = schematic.gears();
         assert_eq!(gears.len(), 2);
 
-        gears.sort_by(|a,b| a.ratio().cmp(&b.ratio()));
+        gears.sort_by_key(|a| a.ratio());
         assert_eq!(gears, vec![Gear(467, 35), Gear(755, 598)]);
     }
 

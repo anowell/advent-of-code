@@ -165,7 +165,7 @@ impl FromStr for Almanac {
         let seeds = crate::parse::extract_nums::<u32>(seeds_line)?;
         let mut maps: Vec<_> = Vec::new();
         for line in lines {
-            if line.trim().len() == 0 {
+            if line.trim().is_empty() {
                 continue;
             }
             if let Some(caps) = RE_LABELS.captures(line) {
@@ -276,7 +276,7 @@ mod test {
         };
 
         let sorted_dest = |range| {
-            let mut res = map.dest_ranges(&vec![range]);
+            let mut res = map.dest_ranges(&[range]);
             res.sort_by(|a, b| a.start.cmp(&b.start));
             res
         };

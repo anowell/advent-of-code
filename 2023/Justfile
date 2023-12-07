@@ -26,6 +26,10 @@ fetch day:
 watch day:
     cargo watch -x "check" -x "test day{{day}}::"
 
+cleanup:
+    cargo fmt
+    cargo clippy --all-targets
+
 # Scaffold a dayX.rs file
 scaffold day:
     cp -n template.rs src/day{{day}}.rs

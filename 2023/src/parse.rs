@@ -40,10 +40,7 @@ where
 pub static RE_NUMS: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
 
 pub fn extract_digits(input: &str) -> Vec<&str> {
-    RE_NUMS
-        .find_iter(input)
-        .map(|m| m.as_str())
-        .collect()
+    RE_NUMS.find_iter(input).map(|m| m.as_str()).collect()
 }
 
 pub fn extract_nums<F>(input: &str) -> Result<Vec<F>, <F as FromStr>::Err>
@@ -56,4 +53,3 @@ where
         .map(F::from_str)
         .collect()
 }
-

@@ -1,14 +1,13 @@
 //! [Advent of Code Day 2](https://adventofcode.com/2023/day/2)
 
+use anyhow::{anyhow as err, bail, Error, Result};
+use itertools::Itertools;
+use once_cell::sync::Lazy;
+use regex::Regex;
 use std::{
     cmp::{self, Ordering},
     str::FromStr,
 };
-use itertools::Itertools;
-use anyhow::{anyhow as err, bail, Error, Result};
-use once_cell::sync::Lazy;
-use regex::Regex;
-
 
 static RE_GAME: Lazy<Regex> = Lazy::new(|| Regex::new(r"Game (\d*): (.*)").unwrap());
 
@@ -71,7 +70,7 @@ impl FromStr for Game {
         }
         let id: u32 = caps[1].parse()?;
         let draws = caps[2]
-            .split(";")
+            .split(';')
             .map(str::trim)
             .map(CubeSet::from_str)
             .try_collect()?;
@@ -153,17 +152,19 @@ mod test {
     use indoc::indoc;
 
     #[test]
+    #[allow(clippy::bool_assert_comparison)]
     fn test_cube_cmp() {
+        // false comparisons don't necessarily imply the inverse comparison is true
         assert_eq!(CubeSet::new(1, 2, 3), CubeSet::new(1, 2, 3));
         assert_eq!(CubeSet::new(1, 2, 3) < CubeSet::new(1, 2, 3), false);
-        assert_eq!(CubeSet::new(1, 2, 3) < CubeSet::new(2, 3, 4), true);
-        assert_eq!(CubeSet::new(1, 2, 3) < CubeSet::new(1, 2, 4), true);
+        assert!(CubeSet::new(1, 2, 3) < CubeSet::new(2, 3, 4));
+        assert!(CubeSet::new(1, 2, 3) < CubeSet::new(1, 2, 4));
         assert_eq!(CubeSet::new(1, 2, 3) < CubeSet::new(4, 4, 2), false);
         assert_eq!(CubeSet::new(1, 2, 3) > CubeSet::new(1, 2, 3), false);
         assert_eq!(CubeSet::new(1, 2, 3) > CubeSet::new(2, 3, 4), false);
         assert_eq!(CubeSet::new(1, 2, 3) > CubeSet::new(1, 2, 4), false);
         assert_eq!(CubeSet::new(1, 2, 3) > CubeSet::new(4, 4, 2), false);
-        assert_eq!(CubeSet::new(5, 5, 5) > CubeSet::new(4, 5, 5), true);
+        assert!(CubeSet::new(5, 5, 5) > CubeSet::new(4, 5, 5));
     }
 
     #[test]
@@ -198,11 +199,11 @@ mod test {
     fn test_game_possible() {
         let complete = CubeSet::new(12, 13, 14);
         let g = sample_games();
-        assert_eq!(true, g[0].is_possible_with(&complete));
-        assert_eq!(true, g[1].is_possible_with(&complete));
-        assert_eq!(false, g[2].is_possible_with(&complete));
-        assert_eq!(false, g[3].is_possible_with(&complete));
-        assert_eq!(true, g[4].is_possible_with(&complete));
+        assert!(g[0].is_possible_with(&complete));
+        assert!(g[1].is_possible_with(&complete));
+        assert!(!g[2].is_possible_with(&complete));
+        assert!(!g[3].is_possible_with(&complete));
+        assert!(g[4].is_possible_with(&complete));
     }
 
     #[test]

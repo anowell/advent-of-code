@@ -1,8 +1,8 @@
 use anyhow::Context;
 use serde_json::{json, Value};
 
-pub mod parse;
 pub mod math;
+pub mod parse;
 
 #[derive(Debug, Clone)]
 /// Specifies the puzzle and puzzle input to run
@@ -50,7 +50,7 @@ macro_rules! bench_day {
             let input = crate::input(concat!("day", $day)).unwrap();
             bencher.bench(|| part2(&input).unwrap());
         }
-    }
+    };
 }
 
 // Simply specify the days that are implemented
