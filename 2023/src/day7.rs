@@ -8,27 +8,36 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::ops::Deref;
 
+/// Calculate winnings for Camel Cards hands based on bid
 pub fn part1(input: &str) -> Result<u32> {
     let camel_cards = CamelCards::parse(input)?;
     Ok(camel_cards.winnings())
 }
 
+/// Calculate winnings for Camel Cards hands based on bid using 'J' as Joker
 pub fn part2(input: &str) -> Result<u32> {
     let camel_cards = CamelCards::parse_with_jokers(input)?;
     Ok(camel_cards.winnings())
 }
 
 #[derive(Debug, Clone)]
+/// Represents all hands and bids from a Camel Cards game
 pub struct CamelCards(Vec<HandBid>);
 
 #[derive(Debug, Clone, Copy, Eq)]
+/// A hand of 5 cards
+///
+/// Note: Hand comparison is based on rank
+/// use `Hand::cards` to compare actual cards
 pub struct Hand([Card; 5]);
 
 impl Hand {
+    /// Get the cards from a hand
     pub fn cards(&self) -> [Card; 5] {
         self.0
     }
 
+    /// Calculates the rank of a hand
     pub fn rank(&self) -> Rank {
         let mut map = HashMap::new();
         let mut jokers = 0;
@@ -64,6 +73,7 @@ impl Hand {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord)]
+/// Ordered ranking of Camel Cards hands
 pub enum Rank {
     HighCard,
     Pair,
@@ -75,12 +85,14 @@ pub enum Rank {
 }
 
 #[derive(Debug, Clone, Copy)]
+/// Represents a single hand and its bid
 pub struct HandBid {
     pub hand: Hand,
     pub bid: u32,
 }
 
 impl CamelCards {
+    /// Calculates the winnings for a
     pub fn winnings(&self) -> u32 {
         let mut hand_bids = self.0.clone();
         hand_bids.sort_by_key(|hb| hb.hand);
@@ -124,6 +136,7 @@ impl PartialOrd for Hand {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Copy, Hash)]
+/// Single Card. Joker is low (when not wild)
 pub enum Card {
     Joker,
     _2,
@@ -182,6 +195,7 @@ impl Hand {
         Ok(Hand(hand))
     }
 }
+
 impl Card {
     pub fn new(c: char) -> Card {
         match c {
