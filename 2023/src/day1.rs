@@ -1,6 +1,7 @@
 //! [Advent of Code Day 1](https://adventofcode.com/2023/day/1)
 
 use crate::prelude::*;
+use aho_corasick::AhoCorasick;
 
 /// Calculates the sum of calibration values (digits only)
 pub fn part1(input: &str) -> Result<u32> {
@@ -36,23 +37,22 @@ fn get_line_val(line: &str) -> Result<u32> {
 static RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"([0-9]|zero|one|two|three|four|five|six|seven|eight|nine)").unwrap());
 
+const PATTERNS: &[&str] = &[
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2",
+    "3", "4", "5", "6", "7", "8", "9",
+];
+
+static AC_NUMBERS: Lazy<AhoCorasick> = Lazy::new(|| AhoCorasick::new(PATTERNS).unwrap());
+
 fn get_line_val2(line: &str) -> Result<u32> {
-    let mut matches = RE.find_iter(line);
+    let mut matches = AC_NUMBERS.find_overlapping_iter(line);
     let m1 = matches
         .next()
         .ok_or_else(|| format_err!("No digit in {line}"))?;
-    let mut m2 = matches.last().unwrap_or(m1);
+    let m2 = matches.last().unwrap_or(m1);
 
-    // Special handling for m2 to catch overlapping input like: "twone"
-    // Could avoid by using Aho-Corasick algorithm instead
-    for i in (m2.start() + 1)..line.len() {
-        if let Some(m) = RE.find_at(line, i) {
-            m2 = m;
-        }
-    }
-
-    let d1 = decode(m1.as_str())?;
-    let d2 = decode(m2.as_str())?;
+    let d1 = decode(PATTERNS[m1.pattern()])?;
+    let d2 = decode(PATTERNS[m2.pattern()])?;
     Ok(10 * d1 + d2)
 }
 
