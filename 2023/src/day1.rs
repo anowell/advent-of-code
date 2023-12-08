@@ -34,9 +34,6 @@ fn get_line_val(line: &str) -> Result<u32> {
     Ok(10 * d1 + d2)
 }
 
-static RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"([0-9]|zero|one|two|three|four|five|six|seven|eight|nine)").unwrap());
-
 const PATTERNS: &[&str] = &[
     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2",
     "3", "4", "5", "6", "7", "8", "9",

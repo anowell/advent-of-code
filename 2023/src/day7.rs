@@ -159,11 +159,11 @@ impl CamelCards {
         CamelCards::parse_with(s, Hand::parse_with_jokers)
     }
 
-    fn parse_with(s: &str, parser_fn: impl Fn(&str) -> Result<Hand>) -> Result<CamelCards> {
+    fn parse_with(s: &str, hand_parser_fn: impl Fn(&str) -> Result<Hand>) -> Result<CamelCards> {
         let hands = RE
             .captures_iter(s)
             .map(|cap| {
-                let hand = parser_fn(&cap[1]).unwrap();
+                let hand = hand_parser_fn(&cap[1]).unwrap();
                 let bid = cap[2].parse::<u32>().unwrap();
                 HandBid { hand, bid }
             })
