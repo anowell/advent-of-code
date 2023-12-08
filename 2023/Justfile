@@ -26,6 +26,11 @@ fetch day:
 watch day:
     cargo watch -x "check" -x "test day{{day}}::"
 
+# Generate docs. Add --open to open docs
+doc *args:
+    cargo doc --no-deps {{args}}
+
+# Run rustfmt and clippy
 cleanup:
     cargo fmt
     cargo clippy --all-targets

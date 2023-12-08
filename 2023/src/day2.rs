@@ -1,13 +1,6 @@
 //! [Advent of Code Day 2](https://adventofcode.com/2023/day/2)
 
-use anyhow::{anyhow as err, bail, Error, Result};
-use itertools::Itertools;
-use once_cell::sync::Lazy;
-use regex::Regex;
-use std::{
-    cmp::{self, Ordering},
-    str::FromStr,
-};
+use crate::prelude::*;
 
 static RE_GAME: Lazy<Regex> = Lazy::new(|| Regex::new(r"Game (\d*): (.*)").unwrap());
 
@@ -64,7 +57,7 @@ impl FromStr for Game {
     fn from_str(s: &str) -> Result<Self> {
         let caps = RE_GAME
             .captures(s)
-            .ok_or_else(|| err!("Invalid game: {s}"))?;
+            .ok_or_else(|| format_err!("Invalid game: {s}"))?;
         if caps.len() < 3 {
             bail!("Invalid game: {s}");
         }

@@ -4,6 +4,16 @@ use serde_json::{json, Value};
 pub mod math;
 pub mod parse;
 
+pub(crate) mod prelude {
+    pub use anyhow::{bail, format_err, Chain, Context, Error, Result};
+    pub use derive_deref::Deref;
+    pub use itertools::Itertools;
+    pub use once_cell::sync::Lazy;
+    pub use regex::Regex;
+    pub use std::cmp::{self, Ordering};
+    pub use std::str::FromStr;
+}
+
 #[derive(Debug, Clone)]
 /// Specifies the puzzle and puzzle input to run
 pub struct Input {

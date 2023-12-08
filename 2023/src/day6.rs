@@ -7,10 +7,9 @@
 //! Every number between them will break the record.
 //! And it works for part 2 if you use a calculator that support 64-bit math.
 
+use crate::prelude::*;
 use crate::{math, parse};
-use anyhow::{Result, Context};
-use itertools::Itertools;
-use std::ops::{Deref, RangeInclusive};
+use std::ops::RangeInclusive;
 
 /// Calculate the product of the number of ways to win each race
 pub fn part1(input: &str) -> Result<u64> {
@@ -32,17 +31,8 @@ pub fn part2(input: &str) -> Result<u64> {
     Ok(ways_to_win)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deref)]
 pub struct Races(Vec<Race>);
-
-impl Deref for Races {
-    type Target = Vec<Race>;
-
-    // Required method
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Race {
@@ -51,6 +41,7 @@ pub struct Race {
     /// This is the record distance
     pub distance: u64,
 }
+
 impl Race {
     pub fn new(time: u64, distance: u64) -> Race {
         Race { time, distance }

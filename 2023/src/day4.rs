@@ -1,10 +1,7 @@
 //! [Advent of Code Day 4](https://adventofcode.com/2023/day/4)
 
-use anyhow::{bail, Error, Result};
-use once_cell::sync::Lazy;
-use regex::Regex;
-use std::{collections::BTreeSet, str::FromStr};
-use itertools::Itertools;
+use crate::prelude::*;
+use std::collections::BTreeSet;
 
 /// Calculates the total points for a set of scratchcards
 pub fn part1(input: &str) -> Result<u32> {

@@ -1,10 +1,7 @@
 //! [Advent of Code Day 3](https://adventofcode.com/2023/day/3)
 
-use std::cmp;
-use anyhow::Result;
-use once_cell::sync::Lazy;
-use regex::{Match, Regex};
-use itertools::Itertools;
+use crate::prelude::*;
+use regex::Match;
 
 /// Calculates the sum of part numbers in the schematic
 pub fn part1(input: &str) -> Result<u32> {
@@ -129,8 +126,7 @@ impl Gear {
 
 impl PartialEq for Gear {
     fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0 && self.1 == other.1 ||
-            self.0 == other.1 && self.1 == other.0
+        self.0 == other.0 && self.1 == other.1 || self.0 == other.1 && self.1 == other.0
     }
 }
 

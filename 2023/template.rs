@@ -1,9 +1,6 @@
 //! [Advent of Code Day DAYNUM](https://adventofcode.com/2023/day/DAYNUM)
 
-use anyhow::{Result, Error, format_err};
-use once_cell::sync::Lazy;
-use regex::Regex;
-use std::str::FromStr;
+use crate::prelude::*;
 
 pub fn part1(input: &str) -> Result<u32> {
     todo!("Implement Part1");
@@ -16,13 +13,17 @@ pub fn part2(input: &str) -> Result<u32> {
 #[derive(Debug, Clone)]
 struct Line {}
 
+impl Line {}
+
 static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"PATTERN").unwrap());
 
 impl FromStr for Line {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        let _caps = RE.captures(s).ok_or_else(|| format_err!("Invalid line: {s}"))?;
+        let _caps = RE
+            .captures(s)
+            .ok_or_else(|| format_err!("Invalid line: {s}"))?;
         todo!("Implement Line::from_str")
     }
 }

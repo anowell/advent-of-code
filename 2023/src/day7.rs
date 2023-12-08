@@ -1,12 +1,7 @@
 //! [Advent of Code Day 7](https://adventofcode.com/2023/day/7)
 
-use anyhow::{format_err, Result};
-use itertools::Itertools;
-use once_cell::sync::Lazy;
-use regex::Regex;
-use std::cmp::Ordering;
+use crate::prelude::*;
 use std::collections::HashMap;
-use std::ops::Deref;
 
 /// Calculate winnings for Camel Cards hands based on bid
 pub fn part1(input: &str) -> Result<u32> {
@@ -20,7 +15,7 @@ pub fn part2(input: &str) -> Result<u32> {
     Ok(camel_cards.winnings())
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deref)]
 /// Represents all hands and bids from a Camel Cards game
 pub struct CamelCards(Vec<HandBid>);
 
@@ -92,7 +87,7 @@ pub struct HandBid {
 }
 
 impl CamelCards {
-    /// Calculates the winnings for a
+    /// Calculates the winnings for a full list of hands and their bids
     pub fn winnings(&self) -> u32 {
         let mut hand_bids = self.0.clone();
         hand_bids.sort_by_key(|hb| hb.hand);
@@ -221,14 +216,6 @@ impl Card {
             'J' => Card::Joker,
             c => Card::new(c),
         }
-    }
-}
-
-impl Deref for CamelCards {
-    type Target = Vec<HandBid>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
     }
 }
 

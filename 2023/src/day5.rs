@@ -1,9 +1,7 @@
 //! [Advent of Code Day 5](https://adventofcode.com/2023/day/5)
 
-use anyhow::{format_err, Error, Result};
-use once_cell::sync::Lazy;
-use regex::Regex;
-use std::{cmp, ops::Range, str::FromStr};
+use crate::prelude::*;
+use std::ops::Range;
 
 /// Find the smallest seed location in the almanac
 pub fn part1(input: &str) -> Result<u32> {
@@ -54,7 +52,7 @@ impl Almanac {
 
         let seeds: Vec<Range<u32>> = self
             .seeds
-            .chunks(2)
+            .chunks_exact(2)
             .map(|chunk| (chunk[0])..(chunk[0] + chunk[1]))
             .collect();
 

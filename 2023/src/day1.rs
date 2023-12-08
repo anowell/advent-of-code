@@ -1,8 +1,6 @@
 //! [Advent of Code Day 1](https://adventofcode.com/2023/day/1)
 
-use anyhow::{format_err, Result};
-use once_cell::sync::Lazy;
-use regex::Regex;
+use crate::prelude::*;
 
 /// Calculates the sum of calibration values (digits only)
 pub fn part1(input: &str) -> Result<u32> {
