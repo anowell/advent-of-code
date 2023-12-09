@@ -1,24 +1,21 @@
 //! [Advent of Code Day 1](https://adventofcode.com/2023/day/1)
 
+use crate::parse;
 use crate::prelude::*;
 use aho_corasick::AhoCorasick;
 
 /// Calculates the sum of calibration values (digits only)
 pub fn part1(input: &str) -> Result<u32> {
-    input
-        .trim()
-        .lines()
-        .map(get_line_val)
-        .try_fold(0, |acc, res| res.map(|val| acc + val))
+    let lines = parse::parse_lines_with(input, get_line_val)?;
+    let sum = lines.iter().sum();
+    Ok(sum)
 }
 
 /// Calculates the sum of calibration values (digits and words only)
 pub fn part2(input: &str) -> Result<u32> {
-    input
-        .trim()
-        .lines()
-        .map(get_line_val2)
-        .try_fold(0, |acc, res| res.map(|val| acc + val))
+    let lines = parse::parse_lines_with(input, get_line_val2)?;
+    let sum = lines.iter().sum();
+    Ok(sum)
 }
 
 fn get_line_val(line: &str) -> Result<u32> {

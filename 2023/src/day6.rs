@@ -48,14 +48,10 @@ impl Race {
     }
 
     pub fn part2_from_str(s: &str) -> Result<Self> {
-        let lines: Vec<u64> = s
-            .trim()
-            .lines()
-            .map(|line| {
-                let nums = parse::extract_digits(line);
-                nums.concat().parse::<u64>()
-            })
-            .try_collect()?;
+        let lines: Vec<u64> = parse::parse_lines_with(s, |line| {
+            let nums = parse::extract_digits(line);
+            nums.concat().parse::<u64>()
+        })?;
 
         let time = lines[0];
         let distance = lines[1];
