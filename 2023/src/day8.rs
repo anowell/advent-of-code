@@ -3,12 +3,16 @@
 use crate::prelude::*;
 use std::collections::{BTreeSet, HashMap};
 
+/// Count the steps traversing a map from 'AAA' to 'ZZZ'
 pub fn part1(input: &str) -> Result<u32> {
     let map = Map::from_str(input)?;
     let count = map.steps_to_zzz();
     Ok(count)
 }
 
+/// Calculate the steps for parallel map traversal from '**A' ending on '**Z' nodes at the same time
+///
+/// This implementation is limited to inputs with loops where a solution node loops back to the head's first node
 pub fn part2(input: &str) -> Result<usize> {
     let map = Map::from_str(input)?;
     let count = map.ghost_steps();
@@ -16,13 +20,14 @@ pub fn part2(input: &str) -> Result<usize> {
 }
 
 #[derive(Debug, Clone)]
-struct Map {
+/// Represents the entire map: direction list and network of nodes
+pub struct Map {
     network: Network,
     dirs: Vec<Dir>,
 }
 
 impl Map {
-    fn steps_to_zzz(&self) -> u32 {
+    pub fn steps_to_zzz(&self) -> u32 {
         let mut node = Node::new("AAA");
         let mut count = 0;
         let end = Node::new("ZZZ");
@@ -44,10 +49,10 @@ impl Map {
     ///
     /// Instead, we panic if the cycle length doesn't match one of the end nodes
     /// And we just log a warning if extra end nodes are found (since they could result in a smaller LCM)
-    fn ghost_steps(&self) -> usize {
+    pub fn ghost_steps(&self) -> usize {
         let cycles = self.find_all_cycles();
 
-        let mut lcm = 1 as usize;
+        let mut lcm = 1;
         for cycle in cycles {
             if cycle.ends.len() > 1 {
                 eprintln!(
@@ -63,7 +68,7 @@ impl Map {
         lcm
     }
 
-    fn find_all_cycles(&self) -> Vec<Cycle> {
+    pub fn find_all_cycles(&self) -> Vec<Cycle> {
         self.network
             .starting_points()
             .into_iter()
@@ -71,8 +76,9 @@ impl Map {
             .collect()
     }
 
-    fn find_cycle(&self, start: Node) -> Cycle {
-        let mut visited = HashMap::from([(NodeHash(start, self.dirs.len() - 1), 0)]);
+    pub fn find_cycle(&self, start: Node) -> Cycle {
+        let last_dir_i = self.dirs.len() - 1;
+        let mut visited = HashMap::from([(NodeHash(start, last_dir_i), 0)]);
         let mut ends = BTreeSet::new();
         let mut current = start;
         let mut i = 0;
@@ -83,17 +89,20 @@ impl Map {
                 if next[2] == 'Z' {
                     ends.insert(i);
                 }
+
                 if let Some(offset) = visited.insert(NodeHash(next, dir_i), i) {
                     let length = visited.len() - offset;
-                    return Cycle {
+                    let cycle = Cycle {
                         offset,
                         length,
                         ends,
                     };
+                    // eprintln!("Cycle at {}: {:?}", next, cycle);
+                    return cycle;
                 }
                 current = next;
             }
-            assert!(i < 1_000_000);
+            assert!(i < 100_000_000);
         }
     }
 }
@@ -102,41 +111,46 @@ impl Map {
 struct NodeHash(Node, usize);
 
 #[derive(Debug, Clone, Deref)]
-struct Network(HashMap<Node, (Node, Node)>);
-
-// type Name = [char; 3];
+pub struct Network(HashMap<Node, (Node, Node)>);
 
 #[derive(Debug, Clone, Deref, Copy, PartialEq, Eq, Hash)]
-struct Node([char; 3]);
+pub struct Node([char; 3]);
+
+use std::fmt::{self, Formatter};
+impl fmt::Display for Node {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::result::Result<(), fmt::Error> {
+        write!(f, "{}{}{}", self[0], self[1], self[2])
+    }
+}
 
 impl Node {
-    fn new(s: &str) -> Node {
+    pub fn new(s: &str) -> Node {
         Node(s.chars().collect_vec().try_into().unwrap())
     }
 }
 
 impl Network {
-    fn follow(&self, node: Node, dir: Dir) -> Node {
+    pub fn follow(&self, node: Node, dir: Dir) -> Node {
         let node_dest = self[&node];
         match dir {
             Dir::Left => node_dest.0,
             Dir::Right => node_dest.1,
         }
     }
-    fn starting_points(&self) -> Vec<Node> {
+    pub fn starting_points(&self) -> Vec<Node> {
         self.keys().filter(|n| n[2] == 'A').cloned().collect()
     }
 }
 
 #[derive(Debug, Clone, PartialEq)]
-struct Cycle {
+pub struct Cycle {
     offset: usize,
     length: usize,
     ends: BTreeSet<usize>,
 }
 
 #[derive(Debug, Clone, PartialEq, Copy)]
-enum Dir {
+pub enum Dir {
     Left,
     Right,
 }
