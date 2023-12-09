@@ -17,6 +17,9 @@ divan = { version = "0.1", optional = true }
 itertools = "0.12.0"
 derive_deref = "1.1.1"
 aho-corasick = "1.1.2"
+parse-display = "0.8.2"
+maplit = "1.0.2"
+num = "0.4.1"
 
 [dev-dependencies]
 indoc = "2.0"
