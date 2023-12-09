@@ -9,12 +9,15 @@ pub fn parse_lines<F>(input: &str) -> Result<Vec<F>, <F as FromStr>::Err>
 where
     F: FromStr,
 {
-    input
-        .trim()
-        .lines()
-        .map(str::trim)
-        .map(str::parse)
-        .collect()
+    parse_lines_with(input, str::parse)
+}
+
+/// Parses each line with a provided parsing function
+pub fn parse_lines_with<T, E>(
+    input: &str,
+    parse_fn: impl Fn(&str) -> Result<T, E>,
+) -> Result<Vec<T>, E> {
+    input.trim().lines().map(str::trim).map(parse_fn).collect()
 }
 
 /// Splits the input based on a Regex, then parses the splits
@@ -39,7 +42,7 @@ where
 }
 
 /// Regex for matching digits
-pub static RE_NUMS: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
+pub static RE_NUMS: Lazy<Regex> = Lazy::new(|| Regex::new(r"-?[0-9]\d*").unwrap());
 
 /// Extracts digits from the input string (no parsing)
 pub fn extract_digits(input: &str) -> Vec<&str> {
