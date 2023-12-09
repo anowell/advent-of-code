@@ -6,19 +6,19 @@ use crate::prelude::*;
 /// Finds the next number in a sequence by deriving a difference tree
 pub fn part1(input: &str) -> Result<i64> {
     let list = parse::parse_lines_with(input, parse::extract_nums)?;
-    let sum = list.iter().map(|l| next_in_pattern(&l)).sum();
+    let sum = list.iter().map(|l| next_in_pattern(l)).sum();
     Ok(sum)
 }
 
 /// Finds the previous number in a sequence by deriving a difference tree
 pub fn part2(input: &str) -> Result<i64> {
     let list = parse::parse_lines_with(input, parse::extract_nums)?;
-    let sum = list.iter().map(|l| prev_in_pattern(&l)).sum();
+    let sum = list.iter().map(|l| prev_in_pattern(l)).sum();
     Ok(sum)
 }
 
 fn derivatives(list: &[i64]) -> Vec<i64> {
-    list.into_iter()
+    list.iter()
         .tuple_windows()
         .map(|(a, b)| b - a)
         .collect_vec()
