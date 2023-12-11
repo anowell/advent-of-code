@@ -39,4 +39,3 @@ cleanup:
 scaffold day:
     cp -n template.rs src/day{{day}}.rs
     sed -i 's|DAYNUM|{{day}}|g' src/day{{day}}.rs
-    sed -i 's|\(handle_days[^{{day}}]*\)]|\1, {{day}}]|' src/lib.rs

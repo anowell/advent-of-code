@@ -1,5 +1,6 @@
 //! Utility functions for parsing
 
+use itertools::Itertools;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::str::FromStr;
@@ -39,6 +40,23 @@ where
         .map(str::trim)
         .map(str::parse)
         .collect()
+}
+
+use grid::Grid;
+pub fn parse_2d<T>(input: &str) -> anyhow::Result<Grid<T>>
+where
+    T: TryFrom<char>,
+    <T as TryFrom<char>>::Error: std::error::Error + Send + Sync + 'static,
+{
+    let width = input.trim().lines().next().unwrap().len();
+    let items: Vec<T> = input
+        .trim()
+        .chars()
+        .filter(|c| !c.is_whitespace())
+        .map(T::try_from)
+        .try_collect()?;
+    let arr2 = Grid::from_vec_with_order(items, width, grid::Order::ColumnMajor);
+    Ok(arr2)
 }
 
 /// Regex for matching digits

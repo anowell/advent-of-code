@@ -1,6 +1,7 @@
 //! [Advent of Code Day 10](https://adventofcode.com/2023/day/10)
 
 use crate::prelude::*;
+use grid::Grid;
 
 pub fn part1(input: &str) -> Result<usize> {
     let field = Field::from_str(input)?;
@@ -12,14 +13,12 @@ pub fn part2(_input: &str) -> Result<u32> {
     todo!("Implement Part2");
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deref)]
 struct Field {
-    tiles: Vec<Tile>,
-    width: usize,
-    height: usize,
+    tiles: Grid<Tile>,
 }
 
-use parse_display::{Display, FromStr};
+use parse_display::{Display, FromStr, ParseError};
 #[derive(Debug, Clone, Copy, Display, FromStr, PartialEq)]
 enum Tile {
     #[display("|")]
@@ -40,11 +39,12 @@ enum Tile {
     Start,
 }
 
-impl Tile {
-    fn from_char(c: char) -> Result<Tile> {
+impl TryFrom<char> for Tile {
+    type Error = ParseError;
+    fn try_from(c: char) -> std::result::Result<Tile, Self::Error> {
         let mut tmp = [0];
         let s = c.encode_utf8(&mut tmp);
-        Tile::from_str(s).map_err(Error::from)
+        Tile::from_str(s)
     }
 }
 
@@ -87,17 +87,17 @@ impl Field {
     }
 
     fn coord_from_index(&self, i: usize) -> Coord {
-        Coord::from((i % self.width, i / self.width))
+        Coord::from((i % self.cols(), i / self.cols()))
     }
 
     fn tile<C: Into<Coord>>(&self, coord: C) -> Tile {
         let coord = coord.into();
-        self.tiles[coord.y * self.width + coord.x]
+        self.tiles[(coord.x, coord.y)]
     }
 
     fn connected_neighbors(&self, coord: Coord) -> Option<(Coord, Coord)> {
-        let max_x = self.width - 1;
-        let max_y = self.height - 1;
+        let max_x = self.cols() - 1;
+        let max_y = self.rows() - 1;
         match self.tile(coord) {
             Tile::PipeNS if coord.y > 0 && coord.y < max_y => {
                 Some((coord.offset(0, 1), coord.offset(0, -1)))
@@ -190,19 +190,8 @@ impl FromStr for Field {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        let width = s.trim().lines().next().unwrap().len();
-        let tiles: Vec<Tile> = s
-            .trim()
-            .chars()
-            .filter(|c| !c.is_whitespace())
-            .map(Tile::from_char)
-            .try_collect()?;
-        let height = tiles.len() / width;
-        Ok(Field {
-            tiles,
-            width,
-            height,
-        })
+        let tiles: Grid<Tile> = crate::parse::parse_2d::<Tile>(s)?;
+        Ok(Field { tiles })
     }
 }
 
