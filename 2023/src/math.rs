@@ -14,3 +14,8 @@ pub fn quadratic(a: f64, b: f64, c: f64) -> (f64, f64) {
     let root2 = (-b + delta.sqrt()) / (2.0 * a);
     (root1, root2)
 }
+
+pub type Coord = (usize, usize);
+pub fn manhattan_distance(a: Coord, b: Coord) -> usize {
+    a.0.abs_diff(b.0) + a.1.abs_diff(b.1)
+}

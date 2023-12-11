@@ -50,7 +50,6 @@ where
 {
     let width = input.trim().lines().next().unwrap().len();
     let items: Vec<T> = input
-        .trim()
         .chars()
         .filter(|c| !c.is_whitespace())
         .map(T::try_from)
