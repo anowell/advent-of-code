@@ -9,8 +9,11 @@ pub fn part1(input: &str) -> Result<usize> {
     Ok((cycle.len() + 1) / 2)
 }
 
-pub fn part2(_input: &str) -> Result<u32> {
-    todo!("Implement Part2");
+pub fn part2(input: &str) -> Result<u32> {
+    let mut field = Field::from_str(input)?;
+    field.remove_unused_pipes();
+    let count = field.count_enclosed_ground();
+    Ok(count)
 }
 
 #[derive(Debug, Clone, Deref)]
@@ -21,6 +24,8 @@ struct Field {
 use parse_display::{Display, FromStr, ParseError};
 #[derive(Debug, Clone, Copy, Display, FromStr, PartialEq)]
 enum Tile {
+    #[display(".")]
+    Ground,
     #[display("|")]
     PipeNS,
     #[display("-")]
@@ -33,8 +38,6 @@ enum Tile {
     PipeSW,
     #[display("F")]
     PipeSE,
-    #[display(".")]
-    Ground,
     #[display("S")]
     Start,
 }
@@ -71,6 +74,13 @@ impl Coord {
             x: (x + dx) as usize,
             y: (y + dy) as usize,
         }
+    }
+
+    fn diff(&self, other: &Coord) -> (isize, isize) {
+        (
+            other.x as isize - self.x as isize,
+            other.y as isize - self.y as isize,
+        )
     }
 }
 
@@ -184,6 +194,64 @@ impl Field {
         // eprintln!("Path: {}", path.iter().map(|c| c.to_string()).join(" -> "));
         path
     }
+
+    fn remove_unused_pipes(&mut self) {
+        let loop_coords = self.find_loop_path();
+        let (a, start, b) = (
+            *(loop_coords.last().unwrap()),
+            loop_coords[0],
+            loop_coords[1],
+        );
+        let (cols, rows) = self.tiles.size();
+        let items = vec![Tile::Ground; cols * rows];
+        let mut grid = Grid::from_vec_with_order(items, cols, grid::Order::ColumnMajor);
+        for c in loop_coords {
+            let tile = self.tiles[(c.x, c.y)];
+            grid[(c.x, c.y)] = tile;
+        }
+        let a_delta = start.diff(&a);
+        let b_delta = start.diff(&b);
+        grid[(start.x, start.y)] = match (a_delta, b_delta) {
+            ((0, _), (0, _)) => Tile::PipeNS,
+            ((_, 0), (_, 0)) => Tile::PipeWE,
+            ((1, 0), (0, 1)) | ((0, 1), (1, 0)) => Tile::PipeSE,
+            ((-1, 0), (0, 1)) | ((0, 1), (-1, 0)) => Tile::PipeSW,
+            ((1, 0), (0, -1)) | ((0, -1), (1, 0)) => Tile::PipeNE,
+            ((-1, 0), (0, -1)) | ((0, -1), (-1, 0)) => Tile::PipeNW,
+            _ => unreachable!("Start had neighbor deltas {:?} and {:?}", a_delta, b_delta),
+        };
+        self.tiles = grid
+    }
+
+    fn count_enclosed_ground(&self) -> u32 {
+        let mut count = 0;
+        let mut crossed_wall = false;
+        let mut last_corner = None::<Tile>;
+
+        for row in self.tiles.iter_rows() {
+            crossed_wall = false;
+            last_corner = None;
+            for tile in row {
+                match (*tile, last_corner) {
+                    (Tile::Ground, _) if crossed_wall => count += 1,
+                    (Tile::Ground, _) => (),
+                    (Tile::PipeNS, _) => crossed_wall = !crossed_wall,
+
+                    (Tile::PipeNE, None) => last_corner = Some(Tile::PipeNE),
+                    (Tile::PipeNW, Some(Tile::PipeNE)) => last_corner = None,
+                    (Tile::PipeSW, Some(Tile::PipeNE)) => crossed_wall = !crossed_wall,
+
+                    (Tile::PipeSE, None) => last_corner = Some(Tile::PipeSE),
+                    (Tile::PipeNW, Some(Tile::PipeSW)) => crossed_wall = !crossed_wall,
+                    (Tile::PipeSW, Some(Tile::PipeSE)) => last_corner = None,
+
+                    (found, Some(after)) => unreachable!("Found {} after {}", found, after),
+                    (found, None) => unreachable!("Found {}", found),
+                }
+            }
+        }
+        count
+    }
 }
 
 impl FromStr for Field {
@@ -245,10 +313,38 @@ mod test {
         assert_eq!(part1(SAMPLE3).unwrap(), 8);
     }
 
-    // #[test]
-    // fn test_part2() {
-    //     assert_eq!(part2(SAMPLE).unwrap(), 0);
-    // }
+    const SAMPLE4: &str = indoc! {"
+        ...........
+        .S-------7.
+        .|F-----7|.
+        .||.....||.
+        .||.....||.
+        .|L-7.F-J|.
+        .|..|.|..|.
+        .L--J.L--J.
+        ...........
+    "};
+
+    const SAMPLE5: &str = indoc! {"
+        .F----7F7F7F7F-7....
+        .|F--7||||||||FJ....
+        .||.FJ||||||||L7....
+        FJL7L7LJLJ||LJ.L-7..
+        L--J.L7...LJS7F-7L7.
+        ....F-J..F7FJ|L7L7L7
+        ....L7.F7||L7|.L7L7|
+        .....|FJLJ|FJ|F7|.LJ
+        ....FJL-7.||.||||...
+        ....L---J.LJ.LJLJ...
+    "};
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(SAMPLE).unwrap(), 1);
+        assert_eq!(part2(SAMPLE2).unwrap(), 1);
+        assert_eq!(part2(SAMPLE4).unwrap(), 4);
+        assert_eq!(part2(SAMPLE5).unwrap(), 8);
+    }
 }
 
 #[cfg(feature = "bench")]
