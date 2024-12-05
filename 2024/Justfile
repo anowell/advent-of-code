@@ -1,0 +1,41 @@
+set dotenv-load
+
+# Check compiles
+check:
+    cargo check
+
+# Run solution for specific day
+run day part='1': (test day)
+    cargo run --release --bin aoc -- {{day}}-{{part}}
+
+# Run tests for one of all days
+test day='all':
+    @[ {{day}} == 'all' ] || cargo test day{{day}}:: --lib
+    @[ {{day}} != 'all' ] || cargo test --lib
+
+# Run benchmarks for one of all days
+bench day='all':
+    @[ {{day}} == 'all' ] || cargo bench day{{day}}:: --features bench
+    @[ {{day}} != 'all' ] || cargo bench --features bench
+
+# Download puzzle input. Requires AOC_SESSION in .env
+fetch day:
+    curl -o inputs/day{{day}} --cookie "session=${AOC_SESSION}" https://adventofcode.com/2024/day/{{day}}/input
+
+# Watch for changes; rebuild and retest on changes
+watch day:
+    cargo watch -x "check" -x "test day{{day}}::"
+
+# Generate docs. Add --open to open docs
+doc *args:
+    cargo doc --no-deps {{args}}
+
+# Run rustfmt and clippy
+cleanup:
+    cargo fmt
+    cargo clippy --all-targets
+
+# Scaffold a dayX.rs file
+scaffold day:
+    cp -n template.rs src/day{{day}}.rs
+    sed -i 's|DAYNUM|{{day}}|g' src/day{{day}}.rs
