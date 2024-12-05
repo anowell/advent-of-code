@@ -65,7 +65,7 @@ macro_rules! bench_day {
 }
 
 // Simply specify the days that are implemented
-handle_days![1];
+handle_days![1, 2];
 
 /// Helper to read a given input file into a string
 pub fn input(fname: &str) -> anyhow::Result<String> {

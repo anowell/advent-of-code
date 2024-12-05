@@ -1,4 +1,4 @@
-//! [Advent of Code Day DAYNUM](https://adventofcode.com/2023/day/DAYNUM)
+//! [Advent of Code Day DAYNUM](https://adventofcode.com/2024/day/DAYNUM)
 
 use crate::prelude::*;
 
