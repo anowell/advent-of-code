@@ -68,9 +68,9 @@ fn is_safe_ecc(levels: &[i32]) -> bool {
     // Count bad entries in the report
     let bad_delta_count = deltas.iter().filter(|n| bad(**n)).count();
     match bad_delta_count {
-        // Every level is good, so the report is safe
+        // Every delta is good, so the report is safe
         0 => return true,
-        // 1 delta isn't good. It needs to be able to carry to the previous or next delta for the report to be safe
+        // 1 bad delta. It needs to be able to carry to the previous or next delta for the report to be safe
         1 => {
             // unless it's the first or last delta, in which case the first or last level can be removed
             if bad(*deltas.first().unwrap()) || bad(*deltas.last().unwrap()) {
@@ -83,7 +83,7 @@ fn is_safe_ecc(levels: &[i32]) -> bool {
             }
             return false;
         }
-        // 2 deltas aren't good. They need to be consecutive and sum to a good delta for the report to be safe
+        // 2 bad deltas. They must be consecutive and sum to a good delta for the report to be safe
         2 => {
             for (da, db) in deltas.into_iter().tuple_windows() {
                 if bad(da) && bad(db) {
