@@ -13,6 +13,7 @@ pub(crate) mod prelude {
     pub use regex::Regex;
     pub use std::cmp::{self, Ordering};
     pub use std::str::FromStr;
+    pub use winnow::prelude::*;
 }
 
 #[derive(Debug, Clone)]
@@ -65,7 +66,7 @@ macro_rules! bench_day {
 }
 
 // Simply specify the days that are implemented
-handle_days![1, 2];
+handle_days![1, 2, 3];
 
 /// Helper to read a given input file into a string
 pub fn input(fname: &str) -> anyhow::Result<String> {

@@ -21,6 +21,7 @@ parse-display = "0.10.0"
 maplit = "1.0.2"
 num = "0.4.1"
 grid = "0.15.0"
+winnow = "0.6.20"
 
 [dev-dependencies]
 indoc = "2.0"
