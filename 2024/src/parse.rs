@@ -54,7 +54,7 @@ where
         .filter(|c| !c.is_whitespace())
         .map(T::try_from)
         .try_collect()?;
-    let arr2 = Grid::from_vec_with_order(items, width, grid::Order::ColumnMajor);
+    let arr2 = Grid::from_vec_with_order(items, width, grid::Order::RowMajor);
     Ok(arr2)
 }
 
