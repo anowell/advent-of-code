@@ -52,12 +52,12 @@ macro_rules! bench_day {
     ($day:literal) => {
         use super::*;
 
-        #[divan::bench]
+        #[divan::bench(max_time = std::time::Duration::from_secs(10))]
         fn bench_part1(bencher: divan::Bencher) {
             let input = crate::input(concat!("day", $day)).unwrap();
             bencher.bench(|| part1(&input).unwrap());
         }
-        #[divan::bench]
+        #[divan::bench(max_time = std::time::Duration::from_secs(10))]
         fn bench_part2(bencher: divan::Bencher) {
             let input = crate::input(concat!("day", $day)).unwrap();
             bencher.bench(|| part2(&input).unwrap());
@@ -66,7 +66,7 @@ macro_rules! bench_day {
 }
 
 // Simply specify the days that are implemented
-handle_days![1, 2, 3, 4, 5, 11];
+handle_days![1, 2, 3, 4, 5, 6, 11];
 
 /// Helper to read a given input file into a string
 pub fn input(fname: &str) -> anyhow::Result<String> {

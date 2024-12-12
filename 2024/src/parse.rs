@@ -46,13 +46,13 @@ use grid::Grid;
 pub fn parse_2d<T>(input: &str) -> anyhow::Result<Grid<T>>
 where
     T: TryFrom<char>,
-    <T as TryFrom<char>>::Error: std::error::Error + Send + Sync + 'static,
+    <T as TryFrom<char>>::Error: Into<anyhow::Error> + Send + Sync + 'static,
 {
     let width = input.trim().lines().next().unwrap().len();
     let items: Vec<T> = input
         .chars()
         .filter(|c| !c.is_whitespace())
-        .map(T::try_from)
+        .map(|c| T::try_from(c).map_err(|e| e.into()))
         .try_collect()?;
     let arr2 = Grid::from_vec_with_order(items, width, grid::Order::RowMajor);
     Ok(arr2)
