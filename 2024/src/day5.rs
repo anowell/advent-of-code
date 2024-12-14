@@ -24,7 +24,7 @@ impl Input {
     fn well_ordered_middle_sum(&self) -> u32 {
         let mut sum = 0;
         for update in &self.updates {
-            if well_ordered(&self.rules, &update) {
+            if well_ordered(&self.rules, update) {
                 sum += update[update.len() / 2];
             }
         }
@@ -34,7 +34,7 @@ impl Input {
     fn reordered_middle_sum(&mut self) -> u32 {
         let mut sum = 0;
         for update in &mut self.updates {
-            if !well_ordered(&self.rules, &update) {
+            if !well_ordered(&self.rules, update) {
                 reorder(&self.rules, update);
                 sum += update[update.len() / 2];
             }
@@ -74,7 +74,7 @@ impl FromStr for Input {
     fn from_str(s: &str) -> Result<Self> {
         let mut orderings = Vec::new();
         let mut lines = s.lines();
-        while let Some(line) = lines.next() {
+        for line in lines.by_ref() {
             if line.trim().is_empty() {
                 break;
             }

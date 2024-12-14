@@ -47,9 +47,9 @@ fn extract_multiples_conditional(input: &mut &str) -> PResult<Vec<(u32, u32)>> {
         }
 
         // state machine to parse `don't()`, `do()`, or discard a single token
-        if let Some(_) = opt("don't()").parse_next(input)? {
+        if opt("don't()").parse_next(input)?.is_some() {
             enabled = false;
-        } else if let Some(_) = opt("do()").parse_next(input)? {
+        } else if opt("do()").parse_next(input)?.is_some() {
             enabled = true
         } else {
             let _: PResult<char> = any(input);

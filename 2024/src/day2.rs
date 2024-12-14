@@ -69,7 +69,7 @@ fn is_safe_ecc(levels: &[i32]) -> bool {
     let bad_delta_count = deltas.iter().filter(|n| bad(**n)).count();
     match bad_delta_count {
         // Every delta is good, so the report is safe
-        0 => return true,
+        0 => true,
         // 1 bad delta. It needs to be able to carry to the previous or next delta for the report to be safe
         1 => {
             // unless it's the first or last delta, in which case the first or last level can be removed
@@ -81,7 +81,7 @@ fn is_safe_ecc(levels: &[i32]) -> bool {
                     return true;
                 }
             }
-            return false;
+            false
         }
         // 2 bad deltas. They must be consecutive and sum to a good delta for the report to be safe
         2 => {
@@ -90,10 +90,10 @@ fn is_safe_ecc(levels: &[i32]) -> bool {
                     return good(da + db);
                 }
             }
-            return false;
+            false
         }
         // Too many deltas are bad for the report to be safe
-        _ => return false,
+        _ => false,
     }
 }
 
@@ -113,17 +113,17 @@ mod test {
 
     #[test]
     fn test_helpers() {
-        assert_eq!(true, is_increasing(&[1, 2, 3, 4, 5]));
-        assert_eq!(false, is_increasing(&[5, 4, 3, 2, 1]));
-        assert_eq!(false, is_decreasing(&[1, 2, 3, 4, 5]));
-        assert_eq!(true, is_decreasing(&[5, 4, 3, 2, 1]));
-        assert_eq!(true, is_gradual(&[1, 2, 4, 7, 9]));
-        assert_eq!(true, is_gradual(&[9, 7, 4, 2, 1]));
-        assert_eq!(false, is_gradual(&[9, 4, 3, 2, 1]));
-        assert_eq!(false, is_gradual(&[1, 1]));
-        assert_eq!(true, is_gradual(&[1, 2]));
-        assert_eq!(true, is_gradual(&[1, 4]));
-        assert_eq!(false, is_gradual(&[1, 5]));
+        assert!(is_increasing(&[1, 2, 3, 4, 5]));
+        assert!(!is_increasing(&[5, 4, 3, 2, 1]));
+        assert!(!is_decreasing(&[1, 2, 3, 4, 5]));
+        assert!(is_decreasing(&[5, 4, 3, 2, 1]));
+        assert!(is_gradual(&[1, 2, 4, 7, 9]));
+        assert!(is_gradual(&[9, 7, 4, 2, 1]));
+        assert!(!is_gradual(&[9, 4, 3, 2, 1]));
+        assert!(!is_gradual(&[1, 1]));
+        assert!(is_gradual(&[1, 2]));
+        assert!(is_gradual(&[1, 4]));
+        assert!(!is_gradual(&[1, 5]));
     }
 
     #[test]

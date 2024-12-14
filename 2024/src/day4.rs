@@ -119,13 +119,13 @@ impl WordSearch {
         let sw = self.grid[(row + 1, col - 1)];
         let se = self.grid[(row + 1, col + 1)];
 
-        match (nw, se, ne, sw) {
+        matches!(
+            (nw, se, ne, sw),
             ('M', 'S', 'M', 'S')
-            | ('M', 'S', 'S', 'M')
-            | ('S', 'M', 'M', 'S')
-            | ('S', 'M', 'S', 'M') => true,
-            _ => false,
-        }
+                | ('M', 'S', 'S', 'M')
+                | ('S', 'M', 'M', 'S')
+                | ('S', 'M', 'S', 'M')
+        )
     }
 
     fn check_forward(&self, word: &str, (row, col): (usize, usize)) -> bool {

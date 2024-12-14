@@ -27,7 +27,7 @@ impl Filesystem {
                     panic!("Found a file with no length?");
                 }
             }
-            offset += record.blocks() as usize
+            offset += record.blocks()
         }
         files
     }
@@ -41,7 +41,7 @@ impl Filesystem {
                     ranges.push(Range { offset, size });
                 }
             }
-            offset += record.blocks() as usize
+            offset += record.blocks()
         }
         ranges
     }
@@ -56,7 +56,7 @@ impl Filesystem {
         for (id, file) in self.files().iter().enumerate().rev() {
             // eprintln!("FILE {id}: {} blocks @{}", file.size, file.offset);
 
-            for file_block in (0..file.size).into_iter().rev() {
+            for file_block in (0..file.size).rev() {
                 if file.offset + file_block < free_range.offset + free_range_used {
                     let placement = file.offset + file_block;
                     // eprintln!("  LEAVE: {id} at {placement}");
